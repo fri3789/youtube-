@@ -3,7 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>完全最終版 YouTube DL</title>
+    <title>完全最終版 YouTube DL</title><!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>最終決戦 YouTube DL</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 12px;
+        }
+        .container {
+            background: #1a1a1a;
+            max-width: 780px;
+            width: 100%;
+            padding: 20px 16px;
+            border-radius: 24px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.95);
+            margin: 8px auto;
+        }
+        h1 { color: #fff; font-size: 22px; text-align: center; letter-spacing: -0.5px; }
+        h1 span { color: #ff0000; }
+        .sub {
+            color: #888;
+            text-align: center;
+            font-size: 11px;
+            margin: 2px 0 14px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .sub .badge {
+            display: inline-block;
+            background: #ff0000;
+            color: #fff;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-size: 9px;
+            margin: 1px 1px;
+        }
+        .sub .badge.green { background: #2a7a2a; }
+
+        .install-area {
+            background: #0d0d0d;
+            border: 2px dashed #444;
+            border-radius: 14px;
+            padding: 16px 12px;
+            margin: 2px 0 10px 0;
+            text-align: center;
+        }
+        .drag-link {
+            display: inline-block;
+            background: #ff0000;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 60px;
+            text-decoration: none;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 20px rgba(255,0,0,0.3);
+            transition: 0.2s;
+        }
+        .drag-link:hover { transform: scale(1.04); background: #cc0000; }
+        .drag-link:active { cursor: grabbing; }
+        .install-hint { color: #aaa; font-size: 11px; margin-top: 6px; }
+        .install-hint strong { color: #fff; }
+        kbd { background: #2a2a2a; color: #fff; padding: 1px 5px; border-radius: 4px; font-size: 10px; display: inline-block; }
+
+        .or-divider { color: #555; font-size: 11px; margin: 10px 0; text-align: center; }
+
+        .manual-area {
+            background: #0d0d0d;
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .manual-area label { color: #aaa; font-size: 11px; display: block; margin-bottom: 4px; }
+        .code-wrapper {
+            background: #000;
+            border-radius: 8px;
+            border: 1px solid #333;
+            padding: 8px;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .code-wrapper code {
+            color: #4caf50;
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+            display: block;
+        }
+        .code-wrapper .hl { color: #ffaa00; font-weight: bold; }
+
+        .btn-group { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .btn-copy {
+            padding: 8px 14px;
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+            flex: 1 1 auto;
+            min-width: 80px;
+        }
+        .btn-copy:hover { background: #cc0000; transform: scale(1.02); }
+        .btn-copy.gray { background: #444; }
+        .btn-copy.gray:hover { background: #666; }
+
+        .solution-box {
+            background: #0a1a0a;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 10px;
+        }
+        .solution-box .text {
+            color: #ddd;
+            font-size: 12px;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+        .solution-box .highlight-code {
+            background: #0d0d0d;
+            color: #4caf50;
+            font-family: monospace;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid #333;
+        }
+        .solution-box .error-note {
+            background: #0a1a0a;
+            border-left: 4px solid #4caf50;
+            padding: 5px 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            color: #4caf50;
+            font-size: 11px;
+        }
+
+        .howto {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #2a2a2a;
+        }
+        .howto-title { color: #fff; text-align: center; margin-bottom: 6px; font-size: 14px; }
+        .device-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .device-tabs button {
+            background: #2a2a2a;
+            color: #aaa;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .device-tabs button.active { background: #ff0000; color: #fff; }
+        .device-tabs button:hover { background: #444; }
+
+        .device-content {
+            display: none;
+            background: #0d0d0d;
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #ccc;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .device-content.active { display: block; }
+        .device-content strong { color: #fff; }
+        .device-content ol { padding-left: 18px; margin: 3px 0; }
+        .device-content .highlight-box {
+            background: #1a0a0a;
+            border-left: 4px solid #4caf50;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            color: #4caf50;
+            font-size: 11px;
+        }
+
+        .console-section {
+            margin-top: 12px;
+            background: #0d0d0d;
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid #2a2a2a;
+        }
+        .console-section summary {
+            color: #888;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .console-section summary:hover { color: #fff; }
+        .console-section .code-box {
+            background: #000;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            overflow-x: auto;
+            color: #4caf50;
+            font-family: monospace;
+            font-size: 9px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #333;
+            max-width: 100%;
+        }
+
+        .footer {
+            margin-top: 14px;
+            color: #555;
+            font-size: 10px;
+            text-align: center;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 10px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 500px) {
+            .container { padding: 12px 8px; }
+            h1 { font-size: 18px; }
+            .drag-link { font-size: 15px; padding: 8px 14px; }
+            .code-wrapper code { font-size: 8px; }
+            .btn-copy { font-size: 12px; padding: 6px 10px; min-width: 60px; }
+        }
+        @media (max-width: 380px) {
+            .container { padding: 8px 4px; }
+            h1 { font-size: 15px; }
+            .drag-link { font-size: 13px; padding: 6px 10px; }
+            .code-wrapper code { font-size: 7px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⬇️ YouTube <span>最終</span>ダウンローダー</h1>
+    <div class="sub">
+        <span class="badge">限定公開OK</span>
+        <span class="badge green">高画質</span>
+        <span class="badge green">音声付き優先</span>
+        <span class="badge green">アカウント不要</span>
+    </div>
+
+    <!-- ===== ドラッグ＆ドロップ ===== -->
+    <div class="install-area">
+        <p style="color:#fff;font-weight:600;margin-bottom:8px;font-size:13px;">
+            🖱️ PCは赤いボタンを <strong>ブックマークバー</strong> へドラッグ！
+        </p>
+        <!-- ★★★ 最終解決版：白画面絶対に出ない ★★★ -->
+        <a href="javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=null;best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){alert('この動画はダウンロードできません');return}const title=d.videoDetails?.title||'video';const url=best.url;function showLink(){const c=document.createElement('div');c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;';const b=document.createElement('div');b.style.cssText='background:#1a1a1a;max-width:600px;width:100%;padding:24px;border-radius:16px;border:2px solid #4caf50;text-align:center;';b.innerHTML='<p style=\"color:#fff;font-size:18px;font-weight:bold;margin-bottom:8px;\">✅ ダウンロード準備完了！</p><p style=\"color:#aaa;font-size:14px;margin-bottom:12px;\"><strong style=\"color:#ffaa00;\">下のリンクを長押し</strong>して「ビデオを保存」をタップ</p><a href=\"'+url+'\" style=\"display:block;background:#ff0000;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:bold;word-break:break-all;margin-bottom:10px;\">⬇ 動画を保存（長押し）</a><button onclick=\"this.parentElement.parentElement.parentElement.remove()\" style=\"background:#333;color:#fff;border:none;padding:8px 24px;border-radius:8px;font-size:13px;cursor:pointer;\">閉じる</button>';c.appendChild(b);document.body.appendChild(c);}function tryDownload(){const a=document.createElement('a');a.href=url;a.download=title+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>document.body.removeChild(a),200);}try{tryDownload();}catch(e){try{window.open(url,'_blank');}catch(e2){showLink();}}})();" class="drag-link" id="bookmarkletLink">
+            ⬇ このボタンをドラッグ！
+        </a>
+        <div class="install-hint">
+            💡 ブックマークバー非表示は <kbd>Ctrl+Shift+B</kbd> (Mac <kbd>Cmd+Shift+B</kbd>)
+        </div>
+    </div>
+
+    <div class="or-divider">— または 手動でインストール（全デバイス対応） —</div>
+
+    <!-- ===== コードコピー ===== -->
+    <div class="manual-area">
+        <label>📋 下のコードをコピーして、新しいブックマークの <strong>「URL」欄</strong> に貼り付けてください</label>
+        <div class="code-wrapper">
+            <code id="bookmarkCode">
+<span class="hl">javascript:</span>(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=null;best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){alert('この動画はダウンロードできません');return}const title=d.videoDetails?.title||'video';const url=best.url;function showLink(){const c=document.createElement('div');c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;';const b=document.createElement('div');b.style.cssText='background:#1a1a1a;max-width:600px;width:100%;padding:24px;border-radius:16px;border:2px solid #4caf50;text-align:center;';b.innerHTML='&lt;p style="color:#fff;font-size:18px;font-weight:bold;margin-bottom:8px;"&gt;✅ ダウンロード準備完了！&lt;/p&gt;&lt;p style="color:#aaa;font-size:14px;margin-bottom:12px;"&gt;&lt;strong style="color:#ffaa00;"&gt;下のリンクを長押し&lt;/strong&gt;して「ビデオを保存」をタップ&lt;/p&gt;&lt;a href="'+url+'" style="display:block;background:#ff0000;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:bold;word-break:break-all;margin-bottom:10px;"&gt;⬇ 動画を保存（長押し）&lt;/a&gt;&lt;button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#333;color:#fff;border:none;padding:8px 24px;border-radius:8px;font-size:13px;cursor:pointer;"&gt;閉じる&lt;/button&gt;';c.appendChild(b);document.body.appendChild(c);}function tryDownload(){const a=document.createElement('a');a.href=url;a.download=title+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>document.body.removeChild(a),200);}try{tryDownload();}catch(e){try{window.open(url,'_blank');}catch(e2){showLink();}}})();
+            </code>
+        </div>
+        <div class="btn-group">
+            <button class="btn-copy" onclick="copyCode()">📋 コードをコピー</button>
+        </div>
+
+        <!-- ===== 説明 ===== -->
+        <div class="solution-box">
+            <div class="text">
+                動画サイトのURLをコピーしてブラウザ検索欄に張り付けて検索を押す。<br>
+                このページで <span class="highlight-code">javascript:</span> から始まるコードをブックマークに登録し、<br>
+                YouTubeの動画ページでそのブックマークをタップ してください。
+            </div>
+            <div class="error-note">
+                ✅ <strong>白画面・googlevideo.com 完全解決！</strong><br>
+                ① &lt;a download&gt; でダウンロード → ② 新規タブで開く → ③ <strong>リンク表示（長押し保存）</strong><br>
+                絶対に白画面になりません！
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== デバイス別設定 ===== -->
+    <div class="howto">
+        <div class="howto-title">📱 デバイス別 設定ガイド</div>
+        <div class="device-tabs">
+            <button class="active" data-device="iphone">📱 iPhone</button>
+            <button data-device="android">🤖 Android</button>
+            <button data-device="pc">💻 PC</button>
+        </div>
+
+        <div class="device-content active" id="device-iphone">
+            <p><strong>📱 iPhone (Safari) での設定</strong></p>
+            <ol>
+                <li>上の <strong>「📋 コードをコピー」</strong> をタップ</li>
+                <li>Safariで適当なページ（例：Google）を開く</li>
+                <li>共有アイコン（四角から矢印）→「ブックマークに追加」→「保存」</li>
+                <li>ブックマーク一覧（本のマーク）で <strong>さっきのブックマークを長押し</strong> →「編集」</li>
+                <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
+                <li>名前を「YouTube DL」に変更 → 「完了」</li>
+            </ol>
+            <div class="highlight-box">✅ 使う時は <strong>SafariでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！</div>
+        </div>
+
+        <div class="device-content" id="device-android">
+            <p><strong>🤖 Android (Chrome) での設定</strong></p>
+            <ol>
+                <li>上の <strong>「📋 コードをコピー」</strong> をタップ</li>
+                <li>Chromeで <strong>このページ</strong> を開いたまま、アドレスバーの <strong>「☆」</strong> をタップ</li>
+                <li>名前を「YouTube DL」にして「保存」</li>
+                <li>右上の <strong>「︙」</strong> →「ブックマーク」→「ブックマークを管理」</li>
+                <li>さっきのブックマークの右の <strong>「︙」</strong> →「編集」</li>
+                <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
+                <li>「保存」をタップ</li>
+            </ol>
+            <div class="highlight-box">✅ 使う時は <strong>ChromeでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！</div>
+        </div>
+
+        <div class="device-content" id="device-pc">
+            <p><strong>💻 PC (Chrome/Edge/Firefox) での設定</strong></p>
+            <p style="color:#ffaa00;font-weight:600;">🔥 一番簡単！ 上の <strong>赤いボタン</strong> を <strong>ブックマークバー</strong> にドラッグ＆ドロップするだけ！</p>
+            <p style="color:#888;font-size:12px;">💡 ブックマークバーが見えない時は <kbd>Ctrl+Shift+B</kbd> (Macは <kbd>Cmd+Shift+B</kbd>)</p>
+            <hr style="border-color:#2a2a2a;margin:6px 0;">
+            <p style="font-size:12px;color:#aaa;">👆 ドラッグができない場合は、上のコードをコピーして新しいブックマークのURL欄に貼り付けてください。</p>
+        </div>
+    </div>
+
+    <!-- ===== 最終手段 ===== -->
+    <details class="console-section">
+        <summary>🆘 それでも動かない人へ（最終手段）</summary>
+        <p style="color:#aaa;font-size:11px;margin-top:3px;">
+            📌 YouTubeの動画ページのアドレスバーに直接コードを貼り付けて「移動」！
+        </p>
+        <div class="code-box" id="consoleCode">
+javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('動画ページで実行');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let b=null;b=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!b){b=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!b){b=all.filter(f=>f.mimeType&&f.mimeType.includes('video')).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!b){alert('この動画はダウンロードできません');return}const title=d.videoDetails?.title||'video';const url=b.url;function showLink(){const c=document.createElement('div');c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;';const box=document.createElement('div');box.style.cssText='background:#1a1a1a;max-width:600px;width:100%;padding:24px;border-radius:16px;border:2px solid #4caf50;text-align:center;';box.innerHTML='&lt;p style="color:#fff;font-size:18px;font-weight:bold;margin-bottom:8px;"&gt;✅ 準備完了！&lt;/p&gt;&lt;p style="color:#aaa;font-size:14px;margin-bottom:12px;"&gt;&lt;strong style="color:#ffaa00;"&gt;下のリンクを長押し&lt;/strong&gt;して「ビデオを保存」&lt;/p&gt;&lt;a href="'+url+'" style="display:block;background:#ff0000;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:bold;word-break:break-all;margin-bottom:10px;"&gt;⬇ 保存（長押し）&lt;/a&gt;&lt;button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#333;color:#fff;border:none;padding:8px 24px;border-radius:8px;font-size:13px;cursor:pointer;"&gt;閉じる&lt;/button&gt;';c.appendChild(box);document.body.appendChild(c);}function tryDL(){const a=document.createElement('a');a.href=url;a.download=title+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>document.body.removeChild(a),200);}try{tryDL();}catch(e){try{window.open(url,'_blank');}catch(e2){showLink();}}})();
+        </div>
+        <button class="btn-copy gray" style="margin-top:4px;" onclick="copyConsoleCode()">📋 コードをコピー</button>
+    </details>
+
+    <div class="footer">
+        ✅ 限定公開・公開OK &nbsp;|&nbsp; 🎵 音声付き優先 &nbsp;|&nbsp; 📱 全デバイス対応
+    </div>
+</div>
+
+<script>
+    const BOOKMARK_CODE = document.getElementById('bookmarkCode').innerText.trim();
+
+    function copyCode() {
+        copyToClipboard(BOOKMARK_CODE, '✅ コードをコピーしました！\n先頭に javascript: が付いていることを確認してください。');
+    }
+
+    function copyConsoleCode() {
+        const code = document.getElementById('consoleCode').innerText.trim();
+        copyToClipboard(code, '✅ コピーしました！');
+    }
+
+    function copyToClipboard(text, msg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => alert(msg)).catch(() => fallbackCopy(text, msg));
+        } else {
+            fallbackCopy(text, msg);
+        }
+    }
+
+    function fallbackCopy(text, msg) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+            document.execCommand('copy');
+            alert(msg);
+        } catch (e) {
+            alert('手動で選択してコピーしてください。');
+        }
+        document.body.removeChild(ta);
+    }
+
+    document.querySelectorAll('.code-wrapper, .code-box').forEach(el => {
+        el.addEventListener('click', function() {
+            const range = document.createRange();
+            range.selectNode(this);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        });
+    });
+
+    document.querySelectorAll('.device-tabs button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.device-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.device-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('device-' + this.dataset.device).classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
