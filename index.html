@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>YouTube 完全ダウンローダー インストーラー</title>
+    <title>完全決着！YouTubeダウンローダー</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -17,31 +17,38 @@
         }
         .container {
             background: #1a1a1a;
-            max-width: 760px;
+            max-width: 780px;
             width: 100%;
             padding: 30px 24px;
             border-radius: 28px;
             border: 1px solid #2a2a2a;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.95);
         }
-        h1 { color: #fff; font-size: 26px; text-align: center; letter-spacing: -0.5px; }
+        h1 {
+            color: #fff;
+            font-size: 26px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        h1 span { color: #ff0000; }
         .sub {
             color: #888;
             text-align: center;
-            font-size: 14px;
-            margin: 6px 0 24px 0;
-            padding-bottom: 18px;
+            font-size: 13px;
+            margin: 4px 0 22px 0;
+            padding-bottom: 16px;
             border-bottom: 1px solid #2a2a2a;
         }
-        .sub .badge { background: #ff0000; color: #fff; padding: 2px 14px; border-radius: 20px; font-size: 12px; margin-left: 6px; }
+        .sub .badge { background: #ff0000; color: #fff; padding: 2px 12px; border-radius: 20px; font-size: 11px; margin: 0 4px; }
+        .sub .badge.green { background: #2a7a2a; }
 
-        /* メインツールエリア */
+        /* === 赤いドラッグボタン === */
         .install-area {
             background: #0d0d0d;
             border: 2px dashed #444;
             border-radius: 18px;
-            padding: 30px 20px;
-            margin: 10px 0 20px 0;
+            padding: 28px 16px;
+            margin: 6px 0 18px 0;
             text-align: center;
             transition: 0.3s;
         }
@@ -50,9 +57,9 @@
             display: inline-block;
             background: #ff0000;
             color: #fff;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            padding: 16px 40px;
+            padding: 14px 32px;
             border-radius: 60px;
             text-decoration: none;
             cursor: grab;
@@ -60,9 +67,9 @@
             box-shadow: 0 4px 20px rgba(255,0,0,0.3);
             transition: 0.2s;
         }
-        .drag-link:hover { transform: scale(1.05); background: #cc0000; }
+        .drag-link:hover { transform: scale(1.04); background: #cc0000; }
         .drag-link:active { cursor: grabbing; }
-        .install-hint { color: #aaa; font-size: 14px; margin-top: 14px; }
+        .install-hint { color: #aaa; font-size: 13px; margin-top: 12px; }
         .install-hint strong { color: #fff; }
         kbd {
             background: #2a2a2a;
@@ -72,8 +79,9 @@
             font-size: 12px;
         }
 
-        .or-divider { color: #555; font-size: 13px; margin: 20px 0; text-align: center; }
+        .or-divider { color: #555; font-size: 13px; margin: 16px 0; text-align: center; }
 
+        /* === コード表示エリア === */
         .manual-area {
             background: #0d0d0d;
             border-radius: 14px;
@@ -87,7 +95,6 @@
             border: 1px solid #333;
             padding: 12px;
             overflow-x: auto;
-            position: relative;
         }
         .code-wrapper code {
             color: #4caf50;
@@ -95,12 +102,9 @@
             font-size: 12px;
             white-space: pre-wrap;
             word-break: break-all;
-            line-height: 1.6;
+            line-height: 1.7;
         }
-        .code-wrapper .hl-js {
-            color: #ffaa00;
-            font-weight: bold;
-        }
+        .code-wrapper .hl { color: #ffaa00; font-weight: bold; }
         .btn-group {
             display: flex;
             gap: 10px;
@@ -108,7 +112,7 @@
             flex-wrap: wrap;
         }
         .btn-copy {
-            padding: 10px 28px;
+            padding: 10px 24px;
             background: #ff0000;
             color: #fff;
             border: none;
@@ -123,18 +127,36 @@
         .btn-copy:hover { background: #cc0000; transform: scale(1.02); }
         .btn-copy.green { background: #2a7a2a; }
         .btn-copy.green:hover { background: #1e5e1e; }
+        .btn-copy.gray { background: #444; }
+        .btn-copy.gray:hover { background: #666; }
 
-        /* デバイスタブ */
+        .warning-box {
+            background: #1a0a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 10px 14px;
+            margin-top: 12px;
+            border-radius: 6px;
+            color: #ffaa00;
+            font-size: 13px;
+        }
+        .warning-box code {
+            background: #2a2a2a;
+            padding: 0 6px;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        /* === デバイスタブ === */
         .howto {
-            margin-top: 28px;
-            padding-top: 20px;
+            margin-top: 24px;
+            padding-top: 18px;
             border-top: 1px solid #2a2a2a;
         }
-        .howto-title { color: #fff; text-align: center; margin-bottom: 12px; font-size: 16px; }
+        .howto-title { color: #fff; text-align: center; margin-bottom: 10px; font-size: 16px; }
         .device-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 6px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -142,7 +164,7 @@
             background: #2a2a2a;
             color: #aaa;
             border: none;
-            padding: 8px 24px;
+            padding: 7px 20px;
             border-radius: 30px;
             cursor: pointer;
             font-size: 14px;
@@ -156,40 +178,30 @@
             display: none;
             background: #0d0d0d;
             border-radius: 14px;
-            padding: 16px 18px;
+            padding: 14px 16px;
             color: #ccc;
             font-size: 14px;
             line-height: 1.8;
         }
         .device-content.active { display: block; }
         .device-content strong { color: #fff; }
-        .device-content ol { padding-left: 22px; margin: 6px 0; }
+        .device-content ol { padding-left: 22px; margin: 4px 0; }
         .device-content .highlight-box {
             background: #1a0a0a;
-            border-left: 4px solid #ff0000;
-            padding: 10px 14px;
-            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+            padding: 8px 14px;
+            margin: 8px 0;
             border-radius: 6px;
-            color: #ffaa00;
+            color: #4caf50;
             font-size: 13px;
         }
 
-        .footer {
-            margin-top: 24px;
-            color: #555;
-            font-size: 12px;
-            text-align: center;
-            border-top: 1px solid #2a2a2a;
-            padding-top: 16px;
-        }
-        .footer a { color: #ff0000; text-decoration: none; }
-
-        /* コンソール用コード（隠し表示） */
+        /* === 緊急用コンソール === */
         .console-section {
-            margin-top: 20px;
+            margin-top: 18px;
             background: #0d0d0d;
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px 16px;
             border: 1px solid #2a2a2a;
         }
         .console-section summary {
@@ -201,9 +213,9 @@
         .console-section summary:hover { color: #fff; }
         .console-section .code-box {
             background: #000;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 8px;
             overflow-x: auto;
             color: #4caf50;
             font-family: monospace;
@@ -212,49 +224,79 @@
             word-break: break-all;
             border: 1px solid #333;
         }
-        @media (max-width: 480px) { .container { padding: 16px; } h1 { font-size: 20px; } }
+
+        /* === フッター === */
+        .footer {
+            margin-top: 22px;
+            color: #555;
+            font-size: 12px;
+            text-align: center;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 14px;
+        }
+        .footer a { color: #ff0000; text-decoration: none; }
+
+        @media (max-width: 480px) {
+            .container { padding: 14px; }
+            h1 { font-size: 20px; }
+            .drag-link { font-size: 17px; padding: 12px 20px; }
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⬇️ YouTube DL インストーラー</h1>
-    <div class="sub">限定公開・高画質対応 <span class="badge">アカウント不要</span></div>
+    <h1>⬇️ YouTube <span>完全</span>ダウンローダー</h1>
+    <div class="sub">
+        <span class="badge">限定公開OK</span>
+        <span class="badge green">高画質</span>
+        <span class="badge green">音声付き優先</span>
+        <span class="badge green">アカウント不要</span>
+    </div>
 
-    <!-- ★★★★★ ドラッグ＆ドロップ エリア ★★★★★ -->
+    <!-- ============================================================ -->
+    <!-- ★ ドラッグ＆ドロップ エリア（PC最速） -->
+    <!-- ============================================================ -->
     <div class="install-area">
-        <p style="color: #fff; font-weight: 600; margin-bottom: 16px;">
-            🖱️ PCユーザーは赤いボタンを <strong>ブックマークバー</strong> にドラッグ！
+        <p style="color: #fff; font-weight: 600; margin-bottom: 14px;">
+            🖱️ PCは赤いボタンを <strong>ブックマークバー</strong> へドラッグ！
         </p>
-        <!-- ここがブックマークレット (完全版) -->
-        <a href="javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();" class="drag-link" id="bookmarkletLink">
+        <!-- ★★★ 超完全版ブックマークレット（「不可」対策済み） ★★★ -->
+        <a href="javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();" class="drag-link" id="bookmarkletLink">
             ⬇ このボタンをドラッグ！
         </a>
         <div class="install-hint">
-            💡 ブックマークバーが見えない時は <kbd>Ctrl+Shift+B</kbd> (Macは <kbd>Cmd+Shift+B</kbd>)
+            💡 ブックマークバー非表示は <kbd>Ctrl+Shift+B</kbd> (Mac <kbd>Cmd+Shift+B</kbd>)
         </div>
     </div>
 
-    <div class="or-divider">— または 手動でインストール (全デバイス共通) —</div>
+    <div class="or-divider">— または 手動でインストール（全デバイス対応） —</div>
 
-    <!-- ★★★★★ 手動コピーエリア ★★★★★ -->
+    <!-- ============================================================ -->
+    <!-- ★ コードコピーエリア -->
+    <!-- ============================================================ -->
     <div class="manual-area">
         <label>📋 下のコードをコピーして、新しいブックマークの <strong>「URL」欄</strong> に貼り付けてください</label>
         <div class="code-wrapper" id="codeWrapper">
             <code id="bookmarkCode">
-<span class="hl-js">javascript:</span>(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();
+<span class="hl">javascript:</span>(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();
             </code>
         </div>
         <div class="btn-group">
-            <button class="btn-copy" onclick="copyBookmarklet()">📋 コードをコピー</button>
-            <button class="btn-copy green" onclick="copyBookmarkletSimple()">📱 スマホ用（短縮版）</button>
+            <button class="btn-copy" onclick="copyCode()">📋 コードをコピー</button>
+            <button class="btn-copy green" onclick="copyShortCode()">📱 スマホ短縮版</button>
         </div>
-        <p style="color:#ffaa00;font-size:13px;margin-top:10px;">
-            ⚠️ <strong>必ず先頭の <code style="background:#333;padding:0 6px;border-radius:4px;">javascript:</code> が含まれているか確認！</strong><br>
-            もし含まれていないと、クリックした時に「YouTubeに飛んで」しまいます。
-        </p>
+
+        <!-- ★★★ 「YouTubeに飛ぶ」防止の超重要警告 ★★★ -->
+        <div class="warning-box">
+            ⚠️ <strong>絶対に確認！</strong> URL欄の先頭が <code>javascript:</code> で始まっていないと、
+            <strong style="color:#ff5555;">クリックした瞬間にYouTubeに飛びます！</strong>
+            <br>✅ 正しく貼り付けられたか、必ず確認してください。
+        </div>
     </div>
 
-    <!-- ★★★★★ デバイス別 設定手順 ★★★★★ -->
+    <!-- ============================================================ -->
+    <!-- ★ デバイス別 設定手順 -->
+    <!-- ============================================================ -->
     <div class="howto">
         <div class="howto-title">📱 デバイス別 設定ガイド</div>
         <div class="device-tabs">
@@ -274,7 +316,7 @@
                 <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
                 <li>名前を「YouTube DL」に変更 → 「完了」</li>
             </ol>
-            <div class="highlight-box">✅ 使う時は <strong>SafariでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！</div>
+            <div class="highlight-box">✅ 使う時は <strong>SafariでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！<br>📌 URLのコピペは一切不要！</div>
         </div>
 
         <!-- Android -->
@@ -289,7 +331,7 @@
                 <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
                 <li>「保存」をタップ</li>
             </ol>
-            <div class="highlight-box">✅ 使う時は <strong>ChromeでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！</div>
+            <div class="highlight-box">✅ 使う時は <strong>ChromeでYouTube動画ページ</strong>（限定公開OK）を開き、ブックマークをタップするだけ！<br>📌 URLのコピペは一切不要！</div>
         </div>
 
         <!-- PC -->
@@ -297,65 +339,68 @@
             <p><strong>💻 PC (Chrome/Edge/Firefox) での設定</strong></p>
             <p style="color:#ffaa00;font-weight:600;">🔥 一番簡単！ 上の <strong>赤いボタン</strong> を <strong>ブックマークバー</strong> にドラッグ＆ドロップするだけ！</p>
             <p style="color:#888;font-size:13px;">💡 ブックマークバーが見えない時は <kbd>Ctrl+Shift+B</kbd> (Macは <kbd>Cmd+Shift+B</kbd>)</p>
-            <hr style="border-color:#2a2a2a;margin:12px 0;">
+            <hr style="border-color:#2a2a2a;margin:10px 0;">
             <p style="font-size:13px;color:#aaa;">👆 ドラッグができない場合は、上のコードをコピーして新しいブックマークのURL欄に貼り付けてください。</p>
         </div>
     </div>
 
-    <!-- ★★★★★ 緊急用：コンソール実行（フェイルセーフ） ★★★★★ -->
+    <!-- ============================================================ -->
+    <!-- ★ 緊急用：コンソール実行（最終兵器） -->
+    <!-- ============================================================ -->
     <details class="console-section">
-        <summary>🆘 「それでも動かない！」という人へ（コンソール実行）</summary>
-        <p style="color:#aaa;font-size:13px;margin-top:8px;">
-            ブックマークの設定がどうしてもうまくいかない場合、以下のコードをコピーして、<br>
-            YouTubeの動画ページで <strong>F12 → Console</strong> に貼り付けて Enter を押せば即ダウンロードできます。
+        <summary>🆘 それでも動かない人へ（最終手段：コンソール実行）</summary>
+        <p style="color:#aaa;font-size:13px;margin-top:6px;">
+            📌 ブックマークがどうしても設定できない場合、以下のコードをコピーして<br>
+            YouTubeの動画ページで <strong>アドレスバーに貼り付け → 「移動」</strong> するだけ！
         </p>
         <div class="code-box" id="consoleCode">
-(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();
+javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('動画ページで実行');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let b=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!b){alert('ダウンロード可能なストリームがありません');return}const a=document.createElement('a');a.href=b.url;a.download=(d.videoDetails.title||'video')+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();
         </div>
-        <button class="btn-copy" style="margin-top:10px;" onclick="copyConsoleCode()">📋 コンソール用コードをコピー</button>
+        <button class="btn-copy gray" style="margin-top:8px;" onclick="copyConsoleCode()">📋 コンソール用コードをコピー</button>
+        <p style="color:#888;font-size:12px;margin-top:6px;">
+            ⚠️ このコードは <strong>先頭に <code>javascript:</code> が付いています</strong>。そのままアドレスバーに貼り付けて「移動」をタップすれば即実行されます。
+        </p>
     </details>
 
+    <!-- ============================================================ -->
+    <!-- ★ フッター -->
+    <!-- ============================================================ -->
     <div class="footer">
-        ⚠️ YouTubeの仕様変更で突然動かなくなる可能性があります<br>
-        ✅ 動画ページ（<strong>watch?v=</strong> が付くURL）でのみ動作します
+        ✅ 限定公開・公開どちらもOK &nbsp;|&nbsp; 🎵 音声付きを最優先 &nbsp;|&nbsp; 📱 全デバイス対応<br>
+        ⚠️ YouTubeの仕様変更で突然動かなくなる可能性があります
     </div>
 </div>
 
 <script>
-    // デバイスタブ切り替え
-    document.querySelectorAll('.device-tabs button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.device-tabs button').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const device = this.dataset.device;
-            document.querySelectorAll('.device-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('device-' + device).classList.add('active');
-        });
-    });
+    // ================================================================
+    // ★ 完全版コード（先頭に javascript: を含む）
+    // ================================================================
+    const FULL_CODE = `javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();`;
 
-    // 完全なブックマークレットコード（先頭に javascript: を含む）
-    const FULL_BOOKMARKLET = `javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();`;
+    // ================================================================
+    // ★ スマホ短縮版（Safariで認識されやすい）
+    // ================================================================
+    const SHORT_CODE = `javascript:(function(){const d=ytInitialPlayerResponse;if(!d)return alert('動画ページで');const b=[...d.streamingData.formats,...d.streamingData.adaptiveFormats].filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!b)return alert('ストリームなし');const a=document.createElement('a');a.href=b.url;a.download=(d.videoDetails.title||'video')+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();`;
 
-    // 短縮版（スマホで文字数制限がある場合用）
-    const SHORT_BOOKMARKLET = `javascript:(function(){const d=ytInitialPlayerResponse;if(!d)return alert('動画ページで実行');const b=[...d.streamingData.formats,...d.streamingData.adaptiveFormats].filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!b)return alert('不可');const a=document.createElement('a');a.href=b.url;a.download=(d.videoDetails.title||'video')+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();`;
-
-    // コピー機能（完全版）
-    function copyBookmarklet() {
-        copyToClipboard(FULL_BOOKMARKLET, '✅ ブックマーク用コードをコピーしました！');
+    // ================================================================
+    // ★ コピー機能
+    // ================================================================
+    function copyCode() {
+        copyToClipboard(FULL_CODE, '✅ 完全版コードをコピーしました！\n先頭に javascript: が付いていることを確認してください。');
     }
 
-    // コピー機能（短縮版）
-    function copyBookmarkletSimple() {
-        copyToClipboard(SHORT_BOOKMARKLET, '✅ 短縮版コードをコピーしました！（スマホ向け）');
+    function copyShortCode() {
+        copyToClipboard(SHORT_CODE, '✅ スマホ短縮版をコピーしました！\n先頭に javascript: が付いていることを確認してください。');
     }
 
-    // コンソール用コード（javascript: なし）
     function copyConsoleCode() {
         const code = document.getElementById('consoleCode').innerText;
-        copyToClipboard(code, '✅ コンソール用コードをコピーしました！');
+        copyToClipboard(code, '✅ コンソール用コードをコピーしました！\nアドレスバーに貼り付けて「移動」をタップしてください。');
     }
 
-    // 汎用コピー関数
+    // ================================================================
+    // ★ 汎用コピー関数
+    // ================================================================
     function copyToClipboard(text, successMsg) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
@@ -384,13 +429,28 @@
         document.body.removeChild(textarea);
     }
 
-    // コードブロッククリックで選択状態にする
+    // ================================================================
+    // ★ コードブロッククリックで全選択
+    // ================================================================
     document.querySelectorAll('.code-wrapper, .code-box').forEach(el => {
         el.addEventListener('click', function() {
             const range = document.createRange();
             range.selectNode(this);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
+        });
+    });
+
+    // ================================================================
+    // ★ デバイスタブ切り替え
+    // ================================================================
+    document.querySelectorAll('.device-tabs button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.device-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const device = this.dataset.device;
+            document.querySelectorAll('.device-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('device-' + device).classList.add('active');
         });
     });
 </script>
