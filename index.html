@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>究極のYouTubeダウンローダー (単一HTML)</title>
+    <title>Cobalt搭載 究極のYouTube DL</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #0f0f0f;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,62 +17,37 @@
         }
         .container {
             background: #1a1a1a;
-            max-width: 640px;
+            max-width: 680px;
             width: 100%;
             padding: 40px 30px;
-            border-radius: 24px;
-            border: 1px solid #333;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            transition: 0.3s;
+            border-radius: 28px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
         }
-        h1 {
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-        }
+        h1 { color: #fff; font-size: 26px; font-weight: 700; text-align: center; letter-spacing: -0.5px; }
         .sub {
-            color: #aaa;
+            color: #888;
             text-align: center;
             font-size: 14px;
-            margin-bottom: 30px;
+            margin: 6px 0 28px 0;
             border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 20px;
+            padding-bottom: 18px;
         }
-        .sub span {
-            background: #ff0000;
-            color: #fff;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 6px;
-        }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .sub span { background: #ff0000; color: #fff; padding: 2px 14px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
+        .input-group { display: flex; flex-direction: column; gap: 12px; }
         .input-group input {
             padding: 16px 18px;
             font-size: 16px;
             border: 2px solid #333;
-            border-radius: 14px;
-            background: #0a0a0a;
+            border-radius: 16px;
+            background: #0d0d0d;
             color: #fff;
             outline: none;
             transition: 0.2s;
             width: 100%;
         }
-        .input-group input:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 0 3px rgba(255,0,0,0.2);
-        }
-        .input-group input::placeholder {
-            color: #666;
-        }
+        .input-group input:focus { border-color: #ff0000; box-shadow: 0 0 0 3px rgba(255,0,0,0.15); }
+        .input-group input::placeholder { color: #555; }
         .btn-download {
             padding: 16px;
             font-size: 18px;
@@ -84,78 +55,63 @@
             background: #ff0000;
             color: #fff;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
             transition: 0.15s;
             width: 100%;
-            letter-spacing: 0.5px;
         }
-        .btn-download:hover {
-            background: #cc0000;
-            transform: scale(1.01);
-        }
-        .btn-download:disabled {
-            background: #444;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-download:hover { background: #cc0000; transform: scale(1.01); }
+        .btn-download:disabled { background: #444; cursor: not-allowed; transform: none; }
         #status {
             margin-top: 20px;
-            padding: 16px;
-            border-radius: 14px;
+            padding: 16px 18px;
+            border-radius: 16px;
             background: #0d0d0d;
             border: 1px solid #2a2a2a;
-            color: #ddd;
+            color: #ccc;
             font-size: 14px;
             line-height: 1.6;
-            min-height: 70px;
+            min-height: 60px;
             word-break: break-all;
         }
         #status .success { color: #4caf50; font-weight: bold; }
         #status .error { color: #ff5555; font-weight: bold; }
         #status .info { color: #ffaa00; }
         .result-area {
-            margin-top: 16px;
+            margin-top: 18px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
         .result-item {
             background: #0d0d0d;
             border: 1px solid #2a2a2a;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
-        .result-item .label {
-            color: #aaa;
-            font-size: 13px;
-        }
-        .result-item .label strong {
-            color: #fff;
-        }
+        .result-item .label { color: #aaa; font-size: 14px; }
+        .result-item .label strong { color: #fff; }
         .result-item .dl-link {
             background: #2a2a2a;
             color: #fff;
-            padding: 8px 16px;
+            padding: 8px 20px;
             border-radius: 30px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             transition: 0.2s;
             border: 1px solid #444;
+            white-space: nowrap;
         }
-        .result-item .dl-link:hover {
-            background: #ff0000;
-            border-color: #ff0000;
-        }
+        .result-item .dl-link:hover { background: #ff0000; border-color: #ff0000; }
         .footer-tips {
-            margin-top: 30px;
-            padding-top: 20px;
+            margin-top: 28px;
+            padding-top: 18px;
             border-top: 1px solid #2a2a2a;
             color: #666;
             font-size: 13px;
@@ -163,369 +119,208 @@
         }
         .footer-tips strong { color: #aaa; }
         .footer-tips .highlight { color: #ffaa00; }
-        @media (max-width: 480px) {
-            .container { padding: 20px 16px; }
-            h1 { font-size: 22px; }
-        }
+        @media (max-width: 480px) { .container { padding: 20px 16px; } h1 { font-size: 22px; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>⬇️ YouTube ダウンローダー</h1>
-        <div class="sub">高画質・音声付きを最優先 <span>v3.0</span></div>
+<div class="container">
+    <h1>⬇️ 高画質 DL</h1>
+    <div class="sub">Cobaltエンジン搭載 <span>安定版</span></div>
 
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." autofocus>
-            <button class="btn-download" id="downloadBtn">🚀 解析＆ダウンロード</button>
-        </div>
-
-        <div id="status">📌 動画のURLを入力して「解析」を押してください。</div>
-
-        <div id="resultContainer" class="result-area"></div>
-
-        <div class="footer-tips">
-            <p>📱 <strong>iPhoneで写真フォルダに保存する方法</strong></p>
-            <p>① 下の <span class="highlight">「ビデオを保存」</span> リンクを<strong>長押し</strong> → 「ビデオを保存」をタップ</p>
-            <p>② またはダウンロード後、ファイルアプリで共有 → 「ビデオを保存」</p>
-            <p style="margin-top:10px;color:#555;font-size:12px;">⚠️ このツールは非公式API・プロキシを利用します。権利者を尊重し個人利用の範囲でお使いください。</p>
-        </div>
+    <div class="input-group">
+        <input type="text" id="urlInput" placeholder="YouTube URL を貼り付けてください" autofocus>
+        <button class="btn-download" id="downloadBtn">🚀 解析＆ダウンロード</button>
     </div>
 
-    <script>
-        (function() {
-            const urlInput = document.getElementById('urlInput');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const statusDiv = document.getElementById('status');
-            const resultContainer = document.getElementById('resultContainer');
+    <div id="status">📌 動画のURLを入力して「解析」を押してください。</div>
+    <div id="resultContainer" class="result-area"></div>
 
-            // ---------- コアロジック ----------
-            function extractVideoId(url) {
-                const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:[?&]|$)/);
-                return match ? match[1] : null;
-            }
+    <div class="footer-tips">
+        <p>📱 <strong>iPhoneで写真フォルダに保存</strong> → 下のリンクを<strong>長押し</strong>して「ビデオを保存」</p>
+        <p style="margin-top:6px;color:#555;font-size:12px;">⚠️ このツールはCobalt・Pipedの非公開APIを利用します。個人利用の範囲でお使いください。</p>
+    </div>
+</div>
 
-            function setStatus(msg, type = 'info') {
-                statusDiv.innerHTML = msg;
-                statusDiv.className = type;
-            }
+<script>
+    (function() {
+        const urlInput = document.getElementById('urlInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const statusDiv = document.getElementById('status');
+        const resultContainer = document.getElementById('resultContainer');
 
-            function clearResults() {
-                resultContainer.innerHTML = '';
-            }
+        function extractVideoId(url) {
+            const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:[?&]|$)/);
+            return match ? match[1] : null;
+        }
 
-            function renderDownloadLinks(videoData) {
-                clearResults();
-                let html = '';
+        function setStatus(msg, type = 'info') {
+            statusDiv.innerHTML = msg;
+            statusDiv.className = type;
+        }
 
-                // 1. プログレッシブ (音声+動画) が最優先
-                if (videoData.bestProgressive) {
-                    const p = videoData.bestProgressive;
-                    html += `
-                        <div class="result-item">
-                            <span class="label">🎬 音声＋動画 (プログレッシブ) <strong>${p.height}p</strong></span>
-                            <a href="${p.url}" class="dl-link" download="${videoData.title || 'video'}.mp4">⬇ ビデオを保存</a>
-                        </div>
-                    `;
-                }
+        function clearResults() {
+            resultContainer.innerHTML = '';
+        }
 
-                // 2. 動画のみ (高画質)
-                if (videoData.bestVideo) {
-                    const v = videoData.bestVideo;
-                    html += `
-                        <div class="result-item">
-                            <span class="label">🎥 動画のみ (音声なし) <strong>${v.height}p</strong></span>
-                            <a href="${v.url}" class="dl-link" download="${videoData.title || 'video'}_video.mp4">⬇ ビデオを保存</a>
-                        </div>
-                    `;
-                }
+        function renderDirectDownload(url, title, qualityLabel = '高画質') {
+            clearResults();
+            resultContainer.innerHTML = `
+                <div class="result-item">
+                    <span class="label">🎬 音声＋動画 (プログレッシブ) <strong>${qualityLabel}</strong></span>
+                    <a href="${url}" class="dl-link" download="${title || 'video'}.mp4">⬇ ビデオを保存</a>
+                </div>
+            `;
+        }
 
-                // 3. 音声のみ
-                if (videoData.bestAudio) {
-                    const a = videoData.bestAudio;
-                    html += `
-                        <div class="result-item">
-                            <span class="label">🎵 音声のみ (オーディオ) <strong>${a.bitrate ? Math.round(a.bitrate/1000) + 'kbps' : ''}</strong></span>
-                            <a href="${a.url}" class="dl-link" download="${videoData.title || 'video'}_audio.mp4">⬇ 音声を保存</a>
-                        </div>
-                    `;
-                }
+        // ---------- エンジン1: Cobalt API (最優先・最も安定) ----------
+        async function fetchFromCobalt(videoId) {
+            try {
+                const fullUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                const response = await fetch('https://api.cobalt.tools/api/json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: fullUrl,
+                        videoQuality: 'max',        // 最高画質 (1080p/4Kなど)
+                        audioFormat: 'best',
+                        downloadMode: 'progressive'  // 音声付きで一括ダウンロード
+                    }),
+                    signal: AbortSignal.timeout(10000)
+                });
 
-                if (!html) {
-                    html = `<div class="result-item"><span class="label" style="color:#ff5555;">❌ ダウンロード可能なストリームが見つかりませんでした。</span></div>`;
-                }
+                if (!response.ok) return null;
+                const data = await response.json();
 
-                resultContainer.innerHTML = html;
-            }
-
-            // ---------- 取得エンジン1: Piped API (複数インスタンス) ----------
-            async function fetchFromPiped(videoId) {
-                const instances = [
-                    'https://pipedapi.kavin.rocks',
-                    'https://pipedapi-libre.kavin.rocks',
-                    'https://pipedapi.leptons.xyz',
-                    'https://piped.video'
-                ];
-                for (const base of instances) {
-                    try {
-                        const url = `${base}/streams/${videoId}`;
-                        const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        if (data.videoStreams || data.audioStreams) {
-                            return data;
-                        }
-                    } catch (e) {
-                        // 次のインスタンスへ
+                // Cobaltのレスポンス: { status: "redirect", url: "..." } または { status: "error", text: "..." }
+                if (data.status === 'redirect' && data.url) {
+                    // 画質ラベルを取得 (可能な限り)
+                    let qualityLabel = '最高画質';
+                    if (data.picker && data.picker.video) {
+                        qualityLabel = data.picker.video;
                     }
+                    return {
+                        title: 'video',
+                        downloadUrl: data.url,
+                        quality: qualityLabel,
+                        _source: 'Cobalt'
+                    };
+                } else if (data.status === 'error') {
+                    console.warn('Cobalt Error:', data.text);
+                    return null;
                 }
                 return null;
-            }
-
-            // ---------- 取得エンジン2: Invidious API ----------
-            async function fetchFromInvidious(videoId) {
-                const instances = [
-                    'https://yewtu.be',
-                    'https://invidious.private.coffee',
-                    'https://inv.riverside.rocks'
-                ];
-                for (const base of instances) {
-                    try {
-                        const url = `${base}/api/v1/videos/${videoId}`;
-                        const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        if (data.formatStreams || data.adaptiveFormats) {
-                            return data;
-                        }
-                    } catch (e) {}
-                }
+            } catch (e) {
+                console.warn('Cobalt fetch failed:', e.message);
                 return null;
             }
+        }
 
-            // ---------- 取得エンジン3: プロキシ経由でYouTube直スクレイピング (最終手段) ----------
-            async function fetchFromYouTubeDirect(videoId) {
-                const proxyUrls = [
-                    `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + videoId)}`,
-                    `https://corsproxy.io/?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + videoId)}`
-                ];
-
-                for (const proxyUrl of proxyUrls) {
-                    try {
-                        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(10000) });
-                        if (!res.ok) continue;
-                        const html = await res.text();
-
-                        // ytInitialPlayerResponse を抽出
-                        const regex = /var ytInitialPlayerResponse\s*=\s*({.+?});/s;
-                        const match = html.match(regex);
-                        if (!match) continue;
-
-                        const playerResponse = JSON.parse(match[1]);
-                        const streamingData = playerResponse.streamingData;
-                        if (!streamingData) continue;
-
-                        const formats = streamingData.formats || [];
-                        const adaptiveFormats = streamingData.adaptiveFormats || [];
-
-                        // 整形してPiped風に変換 (後続のパーサーで扱いやすくする)
-                        const videoStreams = [];
-                        const audioStreams = [];
-
-                        // プログレッシブ (formats) はvideo+audio込み
-                        for (const f of formats) {
-                            const mime = f.mimeType || '';
-                            if (mime.includes('video/mp4') || mime.includes('video/webm')) {
-                                videoStreams.push({
-                                    url: f.url,
-                                    height: f.height || 0,
-                                    quality: f.qualityLabel || `${f.height}p`,
-                                    bitrate: f.bitrate,
-                                    mimeType: mime,
-                                    isProgressive: true
-                                });
-                            }
-                        }
-
-                        // アダプティブ (adaptiveFormats)
-                        for (const f of adaptiveFormats) {
-                            const mime = f.mimeType || '';
-                            if (mime.includes('video')) {
-                                videoStreams.push({
-                                    url: f.url,
-                                    height: f.height || 0,
-                                    quality: f.qualityLabel || `${f.height}p`,
-                                    bitrate: f.bitrate,
-                                    mimeType: mime,
-                                    isProgressive: false
-                                });
-                            } else if (mime.includes('audio')) {
-                                audioStreams.push({
-                                    url: f.url,
-                                    bitrate: f.bitrate || 0,
-                                    mimeType: mime,
-                                    quality: f.qualityLabel || 'audio'
-                                });
-                            }
-                        }
-
-                        return {
-                            title: playerResponse.videoDetails?.title || 'video',
-                            videoStreams: videoStreams,
-                            audioStreams: audioStreams,
-                            _source: 'direct'
-                        };
-                    } catch (e) {
-                        continue;
-                    }
-                }
-                return null;
-            }
-
-            // ---------- データパーサー (高画質優先) ----------
-            function parseBestStreams(data) {
-                const result = {
-                    title: data.title || 'video',
-                    bestProgressive: null,
-                    bestVideo: null,
-                    bestAudio: null
-                };
-
-                // 1. 動画ストリームを整理 (プログレッシブ優先)
-                let videoStreams = data.videoStreams || [];
-                // プログレッシブ (音声付き) を分離
-                const progressives = videoStreams.filter(s => s.isProgressive === true || (s.mimeType && s.mimeType.includes('video/mp4') && s.bitrate));
-                const videosOnly = videoStreams.filter(s => !progressives.includes(s));
-
-                // 高さ順ソート
-                const sortByHeight = (arr) => arr.sort((a, b) => (b.height || 0) - (a.height || 0));
-                sortByHeight(progressives);
-                sortByHeight(videosOnly);
-
-                if (progressives.length > 0) {
-                    result.bestProgressive = progressives[0];
-                }
-
-                if (videosOnly.length > 0) {
-                    result.bestVideo = videosOnly[0];
-                }
-
-                // 音声ストリーム (最高ビットレート)
-                const audioStreams = data.audioStreams || [];
-                if (audioStreams.length > 0) {
-                    audioStreams.sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
-                    result.bestAudio = audioStreams[0];
-                }
-
-                // プログレッシブがない場合、videoOnlyがあればそれをメイン扱いにする
-                if (!result.bestProgressive && result.bestVideo) {
-                    result.bestProgressive = result.bestVideo; // 便宜上
-                }
-
-                return result;
-            }
-
-            // ---------- メイン実行 ----------
-            async function handleDownload() {
-                const url = urlInput.value.trim();
-                if (!url) {
-                    alert('YouTubeのURLを入力してください。');
-                    return;
-                }
-                const videoId = extractVideoId(url);
-                if (!videoId) {
-                    setStatus('❌ 無効なYouTube URLです。 (動画IDが取得できません)', 'error');
-                    return;
-                }
-
-                // UIロック
-                downloadBtn.disabled = true;
-                downloadBtn.textContent = '⏳ 解析中...';
-                clearResults();
-                setStatus(`🔍 動画ID: ${videoId} を複数のソースから探しています...`, 'info');
-
+        // ---------- エンジン2: Piped API (Cobaltが落ちた時のバックアップ) ----------
+        async function fetchFromPiped(videoId) {
+            const instances = [
+                'https://pipedapi.kavin.rocks',
+                'https://pipedapi-libre.kavin.rocks',
+                'https://pipedapi.leptons.xyz'
+            ];
+            for (const base of instances) {
                 try {
-                    let rawData = null;
-                    let source = '';
+                    const url = `${base}/streams/${videoId}`;
+                    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    if (!data.videoStreams || data.videoStreams.length === 0) continue;
 
-                    // ステージ1: Piped
-                    setStatus(`🔍 [1/3] Piped API を試行中...`, 'info');
-                    rawData = await fetchFromPiped(videoId);
-                    if (rawData) {
-                        source = 'Piped';
-                        rawData.title = rawData.title || 'video';
-                        // Pipedは videoStreams / audioStreams をそのまま持つ
+                    // プログレッシブを最優先で探す
+                    const progressives = data.videoStreams.filter(s => s.isProgressive === true);
+                    let best = null;
+                    if (progressives.length > 0) {
+                        progressives.sort((a, b) => (b.height || 0) - (a.height || 0));
+                        best = progressives[0];
+                    } else {
+                        // プログレッシブがなければ、動画のみの中で最高画質
+                        const sorted = data.videoStreams.sort((a, b) => (b.height || 0) - (a.height || 0));
+                        best = sorted[0];
                     }
-
-                    // ステージ2: Invidious
-                    if (!rawData) {
-                        setStatus(`🔍 [2/3] Invidious API を試行中...`, 'info');
-                        rawData = await fetchFromInvidious(videoId);
-                        if (rawData) {
-                            source = 'Invidious';
-                            // Invidiousの形式をPiped風に変換
-                            const videoStreams = [];
-                            const audioStreams = [];
-                            (rawData.formatStreams || []).forEach(f => {
-                                if (f.type && f.type.includes('video')) {
-                                    videoStreams.push({ url: f.url, height: f.height || 0, quality: f.qualityLabel, bitrate: f.bitrate, mimeType: f.type, isProgressive: true });
-                                }
-                            });
-                            (rawData.adaptiveFormats || []).forEach(f => {
-                                if (f.type && f.type.includes('video')) {
-                                    videoStreams.push({ url: f.url, height: f.height || 0, quality: f.qualityLabel, bitrate: f.bitrate, mimeType: f.type, isProgressive: false });
-                                } else if (f.type && f.type.includes('audio')) {
-                                    audioStreams.push({ url: f.url, bitrate: f.bitrate, mimeType: f.type });
-                                }
-                            });
-                            rawData = {
-                                title: rawData.title || 'video',
-                                videoStreams: videoStreams,
-                                audioStreams: audioStreams
-                            };
-                        }
+                    if (best && best.url) {
+                        return {
+                            title: data.title || 'video',
+                            downloadUrl: best.url,
+                            quality: best.quality || `${best.height}p`,
+                            _source: 'Piped'
+                        };
                     }
+                } catch (e) {}
+            }
+            return null;
+        }
 
-                    // ステージ3: プロキシ直スクレイピング (最終手段)
-                    if (!rawData) {
-                        setStatus(`🔍 [3/3] プロキシ経由でYouTube直取得を試行中... (時間がかかることがあります)`, 'info');
-                        rawData = await fetchFromYouTubeDirect(videoId);
-                        if (rawData) {
-                            source = 'YouTube (Proxy)';
-                        }
-                    }
+        // ---------- メイン実行 (Cobalt→Piped の順でフォールバック) ----------
+        async function handleDownload() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('YouTubeのURLを入力してください。');
+                return;
+            }
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                setStatus('❌ 無効なYouTube URLです。 (動画IDが取得できません)', 'error');
+                return;
+            }
 
-                    if (!rawData || (!rawData.videoStreams && !rawData.audioStreams)) {
-                        setStatus(`❌ 全てのソースを試しましたが、動画情報を取得できませんでした。<br>URLが正しいか、動画が公開されているか確認してください。`, 'error');
-                        downloadBtn.disabled = false;
-                        downloadBtn.textContent = '🚀 解析＆ダウンロード';
-                        return;
-                    }
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = '⏳ 解析中...';
+            clearResults();
+            setStatus(`🔍 動画ID: ${videoId} を取得中... (Cobaltエンジン)`, 'info');
 
-                    // パース
-                    const parsed = parseBestStreams(rawData);
-                    setStatus(`✅ <span class="success">取得成功!</span> ソース: ${source} | タイトル: ${parsed.title}`, 'success');
+            try {
+                let result = null;
 
-                    // レンダリング
-                    renderDownloadLinks(parsed);
-
-                } catch (err) {
-                    console.error(err);
-                    setStatus(`❌ 予期せぬエラー: ${err.message}`, 'error');
-                } finally {
+                // ステージ1: Cobalt (成功率が非常に高い)
+                setStatus(`🔍 [1/2] Cobalt API で高画質を取得中...`, 'info');
+                result = await fetchFromCobalt(videoId);
+                if (result) {
+                    setStatus(`✅ <span class="success">取得成功!</span> ソース: ${result._source} | 画質: ${result.quality}`, 'success');
+                    renderDirectDownload(result.downloadUrl, result.title, result.quality);
                     downloadBtn.disabled = false;
                     downloadBtn.textContent = '🚀 解析＆ダウンロード';
+                    return;
                 }
+
+                // ステージ2: Piped (Cobaltが応答しない場合のバックアップ)
+                setStatus(`🔍 [2/2] Cobaltが応答しません。Piped API を試行中...`, 'info');
+                result = await fetchFromPiped(videoId);
+                if (result) {
+                    setStatus(`✅ <span class="success">取得成功!</span> ソース: ${result._source} | 画質: ${result.quality}`, 'success');
+                    renderDirectDownload(result.downloadUrl, result.title, result.quality);
+                    downloadBtn.disabled = false;
+                    downloadBtn.textContent = '🚀 解析＆ダウンロード';
+                    return;
+                }
+
+                // 全て失敗
+                setStatus(`❌ 全てのソース（Cobalt / Piped）を試しましたが、動画情報を取得できませんでした。<br>
+                          <span style="color:#ffaa00;">📌 考えられる原因:</span><br>
+                          ・動画が限定公開・削除されている<br>
+                          ・Cobalt/Pipedが一時的にレート制限中（数分待って再試行）<br>
+                          ・URLが正しいか確認してください`, 'error');
+
+            } catch (err) {
+                console.error(err);
+                setStatus(`❌ 予期せぬエラー: ${err.message}`, 'error');
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = '🚀 解析＆ダウンロード';
             }
+        }
 
-            // イベントバインド
-            downloadBtn.addEventListener('click', handleDownload);
-            urlInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') handleDownload();
-            });
-
-            // 初期フォーカス
-            urlInput.focus();
-        })();
-    </script>
+        // イベント
+        downloadBtn.addEventListener('click', handleDownload);
+        urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleDownload(); });
+        urlInput.focus();
+    })();
+</script>
 </body>
 </html>
