@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>100%動く YouTube DL ガイド</title>
+    <title>YouTube DL デバイス別ガイド</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -58,6 +58,7 @@
         .badge.red   { background: #450a0a; color: #fca5a5; }
         .badge.yellow{ background: #451a03; color: #fcd34d; }
         .badge.blue  { background: #1e3a5f; color: #93c5fd; }
+        .badge.purple{ background: #3b1e5f; color: #c4a5fd; }
 
         /* タブ */
         .tabs {
@@ -72,12 +73,13 @@
             border: none;
             border-radius: 30px;
             padding: 8px 18px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
             flex: 1 1 auto;
             text-align: center;
+            min-width: 80px;
         }
         .tab-btn.active {
             background: #ff0000;
@@ -94,22 +96,28 @@
             margin-bottom: 12px;
         }
         .panel.active { display: block; }
+
         .panel-title {
             color: #fff;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        .panel-title .icon { font-size: 28px; }
         .panel-desc {
             color: #aaa;
             font-size: 13px;
             line-height: 1.7;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .panel-desc .highlight { color: #fbbf24; }
         .panel-desc .warn { color: #f87171; }
         .panel-desc .ok { color: #4ade80; }
 
+        /* ステップ */
         .step {
             display: flex;
             gap: 12px;
@@ -146,76 +154,58 @@
             font-size: 12px;
             font-family: 'Courier New', monospace;
         }
-
-        .code-box {
-            background: #000;
-            border-radius: 8px;
-            border: 1px solid #333;
-            padding: 10px;
-            overflow: auto;
-            max-height: 160px;
-            margin-top: 6px;
-        }
-        .code-box code {
-            color: #4ade80;
-            font-family: 'Courier New', monospace;
-            font-size: 10px;
-            white-space: pre-wrap;
-            word-break: break-all;
-            line-height: 1.6;
-            display: block;
-        }
-        .code-box .hl { color: #fbbf24; font-weight: bold; }
-
-        .btn-copy {
-            background: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 6px;
-            transition: 0.2s;
-        }
-        .btn-copy:hover { background: #cc0000; }
-
-        .btn-ext {
+        .step-text .btn-small {
             display: inline-block;
             background: #2563eb;
             color: #fff;
-            padding: 8px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 13px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
-            margin-top: 6px;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
+            text-decoration: none;
+            margin-top: 2px;
         }
-        .btn-ext:hover { background: #1d4ed8; }
+        .step-text .btn-small:hover { background: #1d4ed8; }
 
-        .ext-links {
+        /* 推奨サービスボタン */
+        .service-grid {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 8px;
-            margin-top: 8px;
+            margin: 10px 0;
         }
-        .ext-links a {
-            display: inline-block;
+        .service-btn {
+            display: block;
             background: #2a2a2a;
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 12px 16px;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
             transition: 0.2s;
+            border: 1px solid #333;
         }
-        .ext-links a:hover { background: #3a3a3a; transform: scale(1.02); }
+        .service-btn:hover { background: #3a3a3a; transform: scale(1.01); }
+        .service-btn .sub-text {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: #888;
+            margin-top: 2px;
+        }
+        .service-btn.recommend {
+            background: #ff0000;
+            border-color: #ff0000;
+        }
+        .service-btn.recommend:hover { background: #cc0000; }
+        .service-btn.recommend .sub-text { color: #ffaaaa; }
+        .service-btn.blue { background: #2563eb; border-color: #2563eb; }
+        .service-btn.blue:hover { background: #1d4ed8; }
+        .service-btn.purple { background: #7c3aed; border-color: #7c3aed; }
+        .service-btn.purple:hover { background: #6d28d9; }
 
+        /* 注意ボックス */
         .note-box {
             background: #1a0505;
             border: 1px solid #3a1010;
@@ -251,11 +241,13 @@
             .container { padding: 14px 10px; }
             .header h1 { font-size: 22px; }
             .panel { padding: 14px 12px; }
-            .tab-btn { font-size: 12px; padding: 6px 12px; }
+            .tab-btn { font-size: 12px; padding: 6px 12px; min-width: 60px; }
+            .step-text { font-size: 12px; }
         }
         @media (max-width: 360px) {
             .header h1 { font-size: 18px; }
-            .step-text { font-size: 12px; }
+            .panel-title { font-size: 17px; }
+            .service-btn { font-size: 13px; padding: 10px 12px; }
         }
     </style>
 </head>
@@ -264,13 +256,14 @@
 
     <!-- ヘッダー -->
     <div class="header">
-        <h1>⬇️ YouTube <span class="yt">100%</span> DL</h1>
+        <h1>⬇️ YouTube <span class="yt">DL</span> ガイド</h1>
         <div class="sub">デバイス別・確実にダウンロードする方法</div>
         <div class="badges">
-            <span class="badge green">✅ PC</span>
-            <span class="badge blue">✅ iPhone</span>
-            <span class="badge green">✅ Android</span>
-            <span class="badge yellow">⚠ 署名動画は外部ツール推奨</span>
+            <span class="badge green">✅ 無料</span>
+            <span class="badge blue">📱 iPhone</span>
+            <span class="badge green">🤖 Android</span>
+            <span class="badge purple">💻 PC</span>
+            <span class="badge yellow">⚠ 外部サービス利用</span>
         </div>
     </div>
 
@@ -278,106 +271,76 @@
     <!-- タブ -->
     <!-- ============================================================ -->
     <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-pc">💻 PC</button>
-        <button class="tab-btn" data-tab="tab-iphone">📱 iPhone</button>
+        <button class="tab-btn active" data-tab="tab-iphone">📱 iPhone</button>
         <button class="tab-btn" data-tab="tab-android">🤖 Android</button>
-        <button class="tab-btn" data-tab="tab-all">🌐 全デバイス共通</button>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- PC タブ -->
-    <!-- ============================================================ -->
-    <div class="panel active" id="tab-pc">
-        <div class="panel-title">💻 PC（Windows / Mac）</div>
-        <div class="panel-desc">
-            <span class="ok">✅ 最も確実な方法は <strong>yt-dlp</strong> を使うことです。</span><br>
-            コマンドラインで動作し、限定公開・署名動画・高画質・音声付きすべてに対応します。
-        </div>
-
-        <div style="margin-top:6px;">
-            <div class="step">
-                <span class="step-num">1</span>
-                <div class="step-text">
-                    <strong>yt-dlp をインストール</strong><br>
-                    <code>winget install yt-dlp.yt-dlp</code>（Windows）<br>
-                    <code>brew install yt-dlp</code>（Mac）
-                </div>
-            </div>
-            <div class="step">
-                <span class="step-num">2</span>
-                <div class="step-text">
-                    <strong>FFmpeg もインストール</strong>（音声と動画の結合に必要）<br>
-                    <code>winget install Gyan.FFmpeg</code>（Windows）<br>
-                    <code>brew install ffmpeg</code>（Mac）
-                </div>
-            </div>
-            <div class="step">
-                <span class="step-num">3</span>
-                <div class="step-text">
-                    <strong>コマンドを実行</strong><br>
-                    <code>yt-dlp -f "bestvideo+bestaudio" --merge-output-format mp4 "YouTubeのURL"</code>
-                </div>
-            </div>
-        </div>
-
-        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2a2a;">
-            <div style="color:#aaa;font-size:13px;">📌 <strong>ブラウザだけで完結させたい場合</strong></div>
-            <div class="ext-links">
-                <a href="https://cobalt.tools" target="_blank">⚡ Cobalt.tools</a>
-                <a href="https://loader.to" target="_blank">📥 Loader.to</a>
-                <a href="https://y2mate.com" target="_blank">🎬 Y2mate</a>
-            </div>
-            <div style="color:#888;font-size:12px;margin-top:4px;">
-                💡 上記サイトにURLを貼るだけでダウンロードできます（広告あり）
-            </div>
-        </div>
+        <button class="tab-btn" data-tab="tab-pc">💻 PC</button>
+        <button class="tab-btn" data-tab="tab-all">🌐 全デバイス</button>
     </div>
 
     <!-- ============================================================ -->
     <!-- iPhone タブ -->
     <!-- ============================================================ -->
-    <div class="panel" id="tab-iphone">
-        <div class="panel-title">📱 iPhone（Safari）</div>
+    <div class="panel active" id="tab-iphone">
+        <div class="panel-title">
+            <span class="icon">📱</span> iPhone（Safari）
+        </div>
         <div class="panel-desc">
-            <span class="ok">✅ iPhoneで確実なのは <strong>Cobalt.tools</strong> を使う方法です。</span><br>
-            アプリ不要・ブラウザだけで完結します。
+            <span class="ok">✅ iPhoneで確実な方法は <strong>Cobalt.tools</strong> を使うことです。</span><br>
+            アプリ不要・ブラウザだけで完結・広告なし・高画質。限定公開動画にも対応しています。
         </div>
 
-        <div style="margin-top:6px;">
-            <div class="step">
-                <span class="step-num">1</span>
-                <div class="step-text">
-                    <strong>Safariで <code>cobalt.tools</code> を開く</strong>
-                </div>
+        <!-- 推奨サービス -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin-bottom:6px;">🔥 推奨サービス</div>
+        <div class="service-grid">
+            <a href="https://cobalt.tools" target="_blank" class="service-btn recommend">
+                ⚡ Cobalt.tools
+                <span class="sub-text">🏆 最強おすすめ！広告なし・最速・高画質・全デバイス対応</span>
+            </a>
+            <a href="https://ja.savefrom.net" target="_blank" class="service-btn blue">
+                📥 SaveFrom.net
+                <span class="sub-text">老舗・安定・多機能（広告あり）</span>
+            </a>
+            <a href="https://savetube.app" target="_blank" class="service-btn purple">
+                💾 SaveTube.app
+                <span class="sub-text">ウォーターマークなし・シンプル</span>
+            </a>
+        </div>
+
+        <!-- 使い方 -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin:10px 0 4px 0;">📖 使い方（たった3ステップ）</div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">
+                <strong>SafariでYouTubeを開き</strong>、ダウンロードしたい動画の <strong>URLをコピー</strong>
             </div>
-            <div class="step">
-                <span class="step-num">2</span>
-                <div class="step-text">
-                    <strong>YouTubeの動画URLをコピー</strong>して貼り付け
-                </div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">
+                <strong>上の推奨サービス</strong>（Cobalt.tools など）をタップして開く
             </div>
-            <div class="step">
-                <span class="step-num">3</span>
-                <div class="step-text">
-                    <strong>矢印ボタン</strong>を押す → ダウンロード開始
-                </div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text">
+                URLを貼り付けて <strong>ダウンロード</strong> をタップ → 保存完了！
             </div>
         </div>
 
-        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2a2a;">
-            <div style="color:#aaa;font-size:13px;">📌 <strong>ブックマークレットを使う場合</strong></div>
-            <div style="color:#888;font-size:12px;line-height:1.7;">
-                下のコードをコピーしてブックマークに登録 → YouTube動画ページでタップ
-            </div>
-            <div class="code-box">
-                <code id="bookmarkCode">
-<span class="hl">javascript:</span>(function(){let d=window.ytInitialPlayerResponse||(window.ytplayer?.config?.args?.player_response?JSON.parse(window.ytplayer.config.args.player_response):null);if(!d){alert('YouTubeの動画ページで実行してください');return}const all=[].concat(d.streamingData?.formats||[],d.streamingData?.adaptiveFormats||[]);if(all.length===0){alert('ストリーム情報がありません');return}let best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')&&f.mimeType.includes('audio')).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){best=all[0];}if(!best){alert('ストリームが見つかりません');return}let url=best.url||best.signatureCipher||best.cipher;if(!url){alert('URLがありません');return}if(url.includes('s=bf')||url.includes('signature')){alert('署名が必要です。ブラウザではダウンロードできません。');return}const title=d.videoDetails?.title||'video';const safeTitle=title.replace(/[\\/:*?\"<>|]/g,'_');const a=document.createElement('a');a.href=url;a.download=safeTitle+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>{try{document.body.removeChild(a);}catch(e){}},300);})();
-                </code>
-            </div>
-            <button class="btn-copy" onclick="copyBookmark()">📋 コードをコピー</button>
-            <div style="color:#f87171;font-size:12px;margin-top:4px;">
-                ⚠ 署名動画（ほとんどの動画）ではこの方式は失敗します。
-            </div>
+        <!-- iPhone 写真フォルダに保存 -->
+        <div style="background:#0a1a2a;border-left:4px solid #3b82f6;padding:8px 12px;margin-top:10px;border-radius:4px;color:#93c5fd;font-size:12px;line-height:1.7;">
+            📸 <strong>写真フォルダに保存する方法</strong><br>
+            ダウンロード後、「ファイル」アプリを開く → ダウンロードした動画をタップ → 共有ボタン → <strong>「ビデオを保存」</strong> を選ぶと写真フォルダに移せます。
+        </div>
+
+        <!-- 注意 -->
+        <div class="note-box">
+            <div class="title">⚠ iPhoneでの注意点</div>
+            <ul>
+                <li>YouTubeアプリではなく <strong>SafariでYouTubeを開く</strong> 必要があります</li>
+                <li>年齢制限・メンバー限定動画はダウンロードできません</li>
+                <li>Cobalt.tools が最も安定しています</li>
+            </ul>
         </div>
     </div>
 
@@ -385,45 +348,145 @@
     <!-- Android タブ -->
     <!-- ============================================================ -->
     <div class="panel" id="tab-android">
-        <div class="panel-title">🤖 Android（Chrome）</div>
+        <div class="panel-title">
+            <span class="icon">🤖</span> Android（Chrome）
+        </div>
         <div class="panel-desc">
-            <span class="ok">✅ Androidで確実なのは <strong>NewPipe</strong> または <strong>Cobalt.tools</strong> です。</span>
+            <span class="ok">✅ Androidでは <strong>Cobalt.tools</strong> または <strong>NewPipe</strong> が確実です。</span><br>
+            ブラウザで完結する方法と、専用アプリを使う方法の両方を紹介します。
         </div>
 
-        <div style="margin-top:6px;">
-            <div style="color:#aaa;font-size:13px;font-weight:600;">方法A：NewPipe（アプリ）</div>
-            <div class="step">
-                <span class="step-num">1</span>
-                <div class="step-text">
-                    <strong>F-Droid</strong> から <strong>NewPipe</strong> をインストール
-                </div>
-            </div>
-            <div class="step">
-                <span class="step-num">2</span>
-                <div class="step-text">
-                    YouTube動画を <strong>共有</strong> → NewPipe を選択
-                </div>
-            </div>
-            <div class="step">
-                <span class="step-num">3</span>
-                <div class="step-text">
-                    ダウンロードボタンをタップ → 画質選択 → 保存
-                </div>
-            </div>
+        <!-- 方法A: ブラウザ -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin-bottom:4px;">方法A：ブラウザで完結（おすすめ）</div>
+        <div class="service-grid">
+            <a href="https://cobalt.tools" target="_blank" class="service-btn recommend">
+                ⚡ Cobalt.tools
+                <span class="sub-text">🏆 最強おすすめ！広告なし・最速・高画質</span>
+            </a>
+            <a href="https://www.y2mate.com" target="_blank" class="service-btn purple">
+                🎬 Y2mate
+                <span class="sub-text">シンプル・高画質（広告あり）</span>
+            </a>
+        </div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">YouTube動画の <strong>URLをコピー</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">上のサービスを <strong>開いてURLを貼り付け</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text"><strong>ダウンロード</strong> をタップ → 完了！</div>
+        </div>
 
-            <div style="color:#aaa;font-size:13px;font-weight:600;margin-top:10px;">方法B：Cobalt.tools（ブラウザ）</div>
-            <div class="step">
-                <span class="step-num">1</span>
-                <div class="step-text">
-                    Chromeで <strong>cobalt.tools</strong> を開く
-                </div>
+        <!-- 方法B: NewPipe -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin:12px 0 4px 0;">方法B：NewPipe（専用アプリ・より確実）</div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">
+                <strong>F-Droid</strong> から <strong>NewPipe</strong> をインストール
+                <a href="https://f-droid.org/packages/org.schabi.newpipe/" target="_blank" class="btn-small" style="display:inline-block;background:#2563eb;color:#fff;padding:2px 12px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;margin-left:4px;">F-Droidで開く</a>
             </div>
-            <div class="step">
-                <span class="step-num">2</span>
-                <div class="step-text">
-                    YouTubeのURLを貼り付けてダウンロード
-                </div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">YouTube動画を <strong>共有</strong> → NewPipe を選択</div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text">動画ページ右下の <strong>ダウンロードボタン</strong> をタップ → 画質選択 → 保存</div>
+        </div>
+
+        <!-- Android 写真フォルダ -->
+        <div style="background:#0a1a2a;border-left:4px solid #3b82f6;padding:8px 12px;margin-top:10px;border-radius:4px;color:#93c5fd;font-size:12px;line-height:1.7;">
+            📸 <strong>写真フォルダに保存する方法</strong><br>
+            「ファイル」アプリ → 「ダウンロード」フォルダ → 動画を選択 → 共有 → <strong>「ビデオを保存」</strong> を選ぶと写真フォルダに移せます。
+        </div>
+
+        <div class="note-box">
+            <div class="title">⚠ Androidでの注意点</div>
+            <ul>
+                <li>NewPipeは <strong>Google Playにない</strong> のでF-Droidからインストール</li>
+                <li>年齢制限・メンバー限定動画はダウンロードできません</li>
+                <li>Cobalt.tools が最も手軽で確実です</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PC タブ -->
+    <!-- ============================================================ -->
+    <div class="panel" id="tab-pc">
+        <div class="panel-title">
+            <span class="icon">💻</span> PC（Windows / Mac）
+        </div>
+        <div class="panel-desc">
+            <span class="ok">✅ PCでは <strong>Cobalt.tools</strong> が最も手軽。</span><br>
+            <span class="highlight">さらに確実に</span> したい場合は <strong>yt-dlp</strong>（コマンドラインツール）が最強です。
+        </div>
+
+        <!-- 方法A: ブラウザ -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin-bottom:4px;">方法A：ブラウザで完結（おすすめ）</div>
+        <div class="service-grid">
+            <a href="https://cobalt.tools" target="_blank" class="service-btn recommend">
+                ⚡ Cobalt.tools
+                <span class="sub-text">🏆 最強おすすめ！広告なし・最速・高画質</span>
+            </a>
+            <a href="https://ja.savefrom.net" target="_blank" class="service-btn blue">
+                📥 SaveFrom.net
+                <span class="sub-text">老舗・安定・多機能（広告あり）</span>
+            </a>
+            <a href="https://loader.to" target="_blank" class="service-btn purple">
+                📥 Loader.to
+                <span class="sub-text">高画質対応・安定（広告あり）</span>
+            </a>
+        </div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">YouTube動画の <strong>URLをコピー</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">上のサービスを <strong>開いてURLを貼り付け</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text"><strong>ダウンロード</strong> をクリック → 完了！</div>
+        </div>
+
+        <!-- 方法B: yt-dlp（最強） -->
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin:12px 0 4px 0;">方法B：yt-dlp（100%確実・限定公開・署名動画もOK）</div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">
+                <strong>yt-dlp と FFmpeg をインストール</strong><br>
+                <code>winget install yt-dlp.yt-dlp</code>（Windows）<br>
+                <code>brew install yt-dlp ffmpeg</code>（Mac）
             </div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">
+                <strong>コマンドを実行</strong><br>
+                <code>yt-dlp -f "bestvideo+bestaudio" --merge-output-format mp4 "YouTubeのURL"</code>
+            </div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text">
+                <strong>完了！</strong> 動画が保存されます
+            </div>
+        </div>
+
+        <div class="note-box">
+            <div class="title">⚠ PCでの注意点</div>
+            <ul>
+                <li>Cobalt.tools が最も手軽で失敗が少ないです</li>
+                <li>yt-dlp は <strong>すべての動画</strong>（限定公開・署名動画・4K）に対応します</li>
+                <li>年齢制限・メンバー限定動画は <strong>--cookies-from-browser chrome</strong> オプションが必要です</li>
+            </ul>
         </div>
     </div>
 
@@ -431,51 +494,63 @@
     <!-- 全デバイス共通 タブ -->
     <!-- ============================================================ -->
     <div class="panel" id="tab-all">
-        <div class="panel-title">🌐 全デバイス共通（外部サービス）</div>
+        <div class="panel-title">
+            <span class="icon">🌐</span> 全デバイス共通
+        </div>
         <div class="panel-desc">
             <span class="ok">✅ どのデバイスでも同じように使えるサービスです。</span><br>
-            ブラウザだけで完結し、インストール不要。署名動画にも対応しています。
+            iPhone・Android・PCすべてのブラウザで動作し、<strong>アプリ不要・登録不要・無料</strong> です。
         </div>
 
-        <div class="ext-links" style="justify-content:center;">
-            <a href="https://cobalt.tools" target="_blank" style="background:#2563eb;padding:12px 24px;">⚡ Cobalt.tools</a>
-            <a href="https://loader.to" target="_blank" style="background:#7c3aed;padding:12px 24px;">📥 Loader.to</a>
-            <a href="https://y2mate.com" target="_blank" style="background:#0891b2;padding:12px 24px;">🎬 Y2mate</a>
-            <a href="https://savetube.app" target="_blank" style="background:#059669;padding:12px 24px;">💾 SaveTube</a>
+        <div class="service-grid">
+            <a href="https://cobalt.tools" target="_blank" class="service-btn recommend">
+                ⚡ Cobalt.tools
+                <span class="sub-text">🏆 全デバイスで使える最強サービス！広告なし・最速・高画質</span>
+            </a>
+            <a href="https://ja.savefrom.net" target="_blank" class="service-btn blue">
+                📥 SaveFrom.net
+                <span class="sub-text">全デバイス対応・老舗・安定（広告あり）</span>
+            </a>
+            <a href="https://www.y2mate.com" target="_blank" class="service-btn purple">
+                🎬 Y2mate
+                <span class="sub-text">全デバイス対応・シンプル・高画質（広告あり）</span>
+            </a>
+            <a href="https://savetube.app" target="_blank" class="service-btn" style="background:#059669;border-color:#059669;">
+                💾 SaveTube.app
+                <span class="sub-text">全デバイス対応・ウォーターマークなし</span>
+            </a>
         </div>
 
-        <div style="color:#888;font-size:12px;margin-top:8px;text-align:center;">
-            💡 これらのサイトにYouTubeのURLを貼り付けるだけでダウンロードできます。<br>
-            <span class="warn" style="color:#f87171;">⚠ 広告が表示される場合があります。自己責任でご利用ください。</span>
+        <div style="color:#aaa;font-size:13px;font-weight:600;margin:10px 0 4px 0;">📖 共通の使い方</div>
+        <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">YouTube動画の <strong>URLをコピー</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">上のサービスを <strong>開いてURLを貼り付け</strong></div>
+        </div>
+        <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text"><strong>ダウンロード</strong> を押すだけ！</div>
         </div>
 
-        <div style="margin-top:12px;padding-top:12px;border-top:1px solid #2a2a2a;">
-            <div style="color:#aaa;font-size:13px;">📌 <strong>Failed to fetch エラーについて</strong></div>
-            <div style="color:#888;font-size:12px;line-height:1.7;">
-                このエラーは <strong>CORS（クロスオリジン）制限</strong> が原因です。<br>
-                ブラウザは YouTube のサーバーから直接データを取得することを許可していません。<br>
-                そのため、<strong>外部サービス（上記リンク）</strong> を使うのが確実な解決策です。
-            </div>
+        <div class="note-box">
+            <div class="title">🚨 共通の注意事項</div>
+            <ul>
+                <li>年齢制限・メンバー限定・ライブ配信中の動画はダウンロードできません</li>
+                <li>広告が多いサイトもありますが、<strong>Cobalt.tools は広告なし</strong> で安心です</li>
+                <li>ダウンロードした動画は <strong>個人利用</strong> の範囲でお願いします</li>
+            </ul>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- 注意事項 -->
+    <!-- フッター -->
     <!-- ============================================================ -->
-    <div class="note-box">
-        <div class="title">🚨 共通の注意事項</div>
-        <ul>
-            <li><strong>ブラウザ単体</strong>では署名（cipher）が必要な動画はダウンロードできません</li>
-            <li>年齢制限・メンバー限定・ライブ配信中の動画は対象外です</li>
-            <li>iPhone Safari では <code>download</code> 属性が無視される場合があります</li>
-            <li><strong>確実性を求めるなら yt-dlp（PC）</strong> が最強です</li>
-            <li>YouTubeの利用規約を遵守し、動画の権利者を尊重してください</li>
-        </ul>
-    </div>
-
     <div class="footer">
-        ✅ デバイス別に確実な方法をまとめました &nbsp;|&nbsp; 📱 PC / iPhone / Android 対応<br>
-        ⚠ このページはガイドです。実際のダウンロードは自己責任でお願いします。
+        ✅ 全デバイス対応 &nbsp;|&nbsp; 📱 iPhone / 🤖 Android / 💻 PC<br>
+        ⚠ このページは各サービスへのポータルです。実際のダウンロードは自己責任でお願いします。
     </div>
 </div>
 
@@ -483,7 +558,6 @@
 <!-- スクリプト -->
 <!-- ============================================================ -->
 <script>
-    // ===== タブ切り替え =====
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -492,35 +566,6 @@
             document.getElementById(this.dataset.tab).classList.add('active');
         });
     });
-
-    // ===== ブックマークコードコピー =====
-    const BOOKMARK_CODE = document.getElementById('bookmarkCode').textContent.trim();
-
-    function copyBookmark() {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(BOOKMARK_CODE).then(() => {
-                alert('✅ コードをコピーしました！\n先頭に javascript: が付いていることを確認してください。');
-            }).catch(() => fallbackCopyBookmark());
-        } else {
-            fallbackCopyBookmark();
-        }
-    }
-
-    function fallbackCopyBookmark() {
-        const ta = document.createElement('textarea');
-        ta.value = BOOKMARK_CODE;
-        ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;';
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        try {
-            document.execCommand('copy');
-            alert('✅ コードをコピーしました！');
-        } catch (e) {
-            alert('手動で選択してコピーしてください。');
-        }
-        document.body.removeChild(ta);
-    }
 </script>
 </body>
 </html>
