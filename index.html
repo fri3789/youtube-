@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube DL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>100%動く YouTube DL ガイド</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,87 +12,152 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 16px;
+            padding: 16px 10px;
         }
         .container {
             background: #1a1a1a;
-            max-width: 640px;
+            max-width: 720px;
             width: 100%;
             padding: 24px 18px;
             border-radius: 20px;
             border: 1px solid #2a2a2a;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
         }
-        h1 { color: #fff; font-size: 24px; text-align: center; }
-        h1 span { color: #ff0000; }
-        .sub {
-            color: #888;
+        .header {
             text-align: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #2a2a2a;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .header h1 .yt { color: #ff0000; }
+        .header .sub {
+            color: #888;
             font-size: 12px;
-            margin: 4px 0 14px 0;
+            margin-top: 4px;
+        }
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 8px;
         }
         .badge {
-            display: inline-block;
-            background: #2a7a2a;
-            color: #fff;
+            font-size: 10px;
             padding: 2px 10px;
             border-radius: 20px;
-            font-size: 10px;
-            margin: 2px;
+            font-weight: 600;
         }
-        .badge.red { background: #ff0000; }
+        .badge.green { background: #14532d; color: #86efac; }
+        .badge.red   { background: #450a0a; color: #fca5a5; }
+        .badge.yellow{ background: #451a03; color: #fcd34d; }
+        .badge.blue  { background: #1e3a5f; color: #93c5fd; }
 
-        .drag-area {
-            background: #0d0d0d;
-            border: 2px dashed #444;
-            border-radius: 14px;
-            padding: 18px 14px;
-            margin: 10px 0;
+        /* タブ */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .tab-btn {
+            background: #2a2a2a;
+            color: #aaa;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1 1 auto;
             text-align: center;
         }
-        .drag-area p { color: #fff; font-size: 14px; margin-bottom: 8px; }
-        .drag-link {
-            display: inline-block;
+        .tab-btn.active {
             background: #ff0000;
             color: #fff;
-            font-size: 17px;
-            font-weight: 700;
-            padding: 10px 20px;
-            border-radius: 60px;
-            text-decoration: none;
-            cursor: grab;
-            user-select: none;
-            box-shadow: 0 4px 20px rgba(255,0,0,0.3);
-            transition: 0.2s;
         }
-        .drag-link:hover { transform: scale(1.04); background: #cc0000; }
-        .drag-link:active { cursor: grabbing; }
-        .hint { color: #888; font-size: 11px; margin-top: 6px; }
-        .hint kbd {
-            background: #2a2a2a;
-            color: #fff;
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-        }
+        .tab-btn:hover:not(.active) { background: #3a3a3a; }
 
-        .or { color: #555; font-size: 11px; margin: 10px 0; text-align: center; }
-
-        .code-area {
+        .panel {
+            display: none;
             background: #0d0d0d;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 18px 16px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 12px;
         }
-        .code-area label { color: #aaa; font-size: 11px; display: block; margin-bottom: 4px; }
+        .panel.active { display: block; }
+        .panel-title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .panel-desc {
+            color: #aaa;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .panel-desc .highlight { color: #fbbf24; }
+        .panel-desc .warn { color: #f87171; }
+        .panel-desc .ok { color: #4ade80; }
+
+        .step {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 6px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .step:last-child { border-bottom: none; }
+        .step-num {
+            background: #ff0000;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text {
+            color: #ddd;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .step-text strong { color: #fff; }
+        .step-text code {
+            background: #1a1a1a;
+            color: #fbbf24;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+        }
+
         .code-box {
             background: #000;
             border-radius: 8px;
             border: 1px solid #333;
             padding: 10px;
-            overflow-x: auto;
+            overflow: auto;
+            max-height: 160px;
+            margin-top: 6px;
         }
         .code-box code {
-            color: #4caf50;
+            color: #4ade80;
             font-family: 'Courier New', monospace;
             font-size: 10px;
             white-space: pre-wrap;
@@ -100,212 +165,350 @@
             line-height: 1.6;
             display: block;
         }
-        .code-box .hl { color: #ffaa00; font-weight: bold; }
+        .code-box .hl { color: #fbbf24; font-weight: bold; }
 
-        .btn {
-            display: inline-block;
+        .btn-copy {
             background: #ff0000;
             color: #fff;
             border: none;
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 8px;
-            transition: 0.2s;
-        }
-        .btn:hover { background: #cc0000; }
-
-        .guide {
-            margin-top: 16px;
-            padding-top: 14px;
-            border-top: 1px solid #2a2a2a;
-        }
-        .guide-title {
-            color: #fff;
-            font-size: 15px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .device-tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .device-tabs button {
-            background: #2a2a2a;
-            color: #aaa;
-            border: none;
-            padding: 5px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .device-tabs button.active { background: #ff0000; color: #fff; }
-        .device-tabs button:hover { background: #444; }
-
-        .device-content {
-            display: none;
-            background: #0d0d0d;
-            border-radius: 10px;
-            padding: 14px 16px;
-            color: #ccc;
             font-size: 13px;
-            line-height: 1.8;
+            font-weight: 600;
+            margin-top: 6px;
+            transition: 0.2s;
         }
-        .device-content.active { display: block; }
-        .device-content strong { color: #fff; }
-        .device-content ol { padding-left: 18px; margin: 4px 0; }
-        .device-content .tip {
-            background: #1a1a2a;
-            border-left: 4px solid #ffaa00;
-            padding: 6px 12px;
-            margin: 6px 0;
-            border-radius: 4px;
-            color: #ffaa00;
-            font-size: 12px;
-        }
-        .device-content .ok {
-            background: #0a1a0a;
-            border-left: 4px solid #4caf50;
-            padding: 6px 12px;
-            margin: 6px 0;
-            border-radius: 4px;
-            color: #4caf50;
-            font-size: 12px;
-        }
+        .btn-copy:hover { background: #cc0000; }
 
-        .checklist {
-            margin-top: 14px;
-            padding: 12px 14px;
-            background: #1a0a0a;
-            border-radius: 10px;
-            border: 1px solid #ff4444;
+        .btn-ext {
+            display: inline-block;
+            background: #2563eb;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 6px;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
         }
-        .checklist p { color: #ff8888; font-size: 12px; line-height: 1.8; }
-        .checklist strong { color: #ff5555; }
+        .btn-ext:hover { background: #1d4ed8; }
+
+        .ext-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .ext-links a {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .ext-links a:hover { background: #3a3a3a; transform: scale(1.02); }
+
+        .note-box {
+            background: #1a0505;
+            border: 1px solid #3a1010;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 12px;
+        }
+        .note-box .title {
+            color: #f87171;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .note-box ul {
+            list-style: none;
+            font-size: 12px;
+            color: #fca5a5;
+            line-height: 2;
+        }
+        .note-box ul li::before { content: "⚠ "; }
 
         .footer {
-            margin-top: 14px;
             color: #555;
             font-size: 10px;
             text-align: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #2a2a2a;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 14px 10px; }
+            .header h1 { font-size: 22px; }
+            .panel { padding: 14px 12px; }
+            .tab-btn { font-size: 12px; padding: 6px 12px; }
+        }
+        @media (max-width: 360px) {
+            .header h1 { font-size: 18px; }
+            .step-text { font-size: 12px; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⬇️ YouTube <span>DL</span></h1>
-    <div class="sub">
-        <span class="badge red">限定公開OK</span>
-        <span class="badge">高画質</span>
-        <span class="badge">音声付き</span>
-        <span class="badge">アカウント不要</span>
-    </div>
 
-    <!-- ===== ドラッグ（PC） ===== -->
-    <div class="drag-area">
-        <p>🖱️ PCは赤いボタンを <strong>ブックマークバー</strong> へドラッグ！</p>
-        <a href="javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){alert('ダウンロード可能なストリームがありません');return}const a=document.createElement('a');a.href=best.url;a.download=(d.videoDetails?.title||'video')+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>{try{document.body.removeChild(a);}catch(e){}},300);})();" class="drag-link" id="bookmarkletLink">
-            ⬇ このボタンをドラッグ！
-        </a>
-        <div class="hint">💡 ブックマークバー非表示は <kbd>Ctrl+Shift+B</kbd> (Mac <kbd>Cmd+Shift+B</kbd>)</div>
-    </div>
-
-    <div class="or">— または 手動でインストール（全デバイス） —</div>
-
-    <!-- ===== コードコピー ===== -->
-    <div class="code-area">
-        <label>📋 下のコードをコピー → 新しいブックマークのURL欄に貼り付け</label>
-        <div class="code-box">
-            <code id="bookmarkCode">
-<span class="hl">javascript:</span>(function(){const d=ytInitialPlayerResponse;if(!d){alert('YouTubeの動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];let best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){alert('ダウンロード可能なストリームがありません');return}const a=document.createElement('a');a.href=best.url;a.download=(d.videoDetails?.title||'video')+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>{try{document.body.removeChild(a);}catch(e){}},300);})();
-            </code>
-        </div>
-        <button class="btn" onclick="copyCode()">📋 コピーする</button>
-    </div>
-
-    <!-- ===== デバイス別説明（超簡潔） ===== -->
-    <div class="guide">
-        <div class="guide-title">📱 設定手順（タップで切り替え）</div>
-        <div class="device-tabs">
-            <button class="active" data-device="pc">💻 PC</button>
-            <button data-device="iphone">📱 iPhone</button>
-            <button data-device="android">🤖 Android</button>
-        </div>
-
-        <div class="device-content active" id="device-pc">
-            <ol>
-                <li>上の <strong>赤いボタン</strong> を <strong>ブックマークバー</strong> にドラッグ</li>
-                <li>YouTube動画ページでそのブックマークを <strong>クリック</strong></li>
-            </ol>
-            <div class="ok">✅ ダウンロードが自動開始</div>
-        </div>
-
-        <div class="device-content" id="device-iphone">
-            <ol>
-                <li><strong>「コピーする」</strong> をタップしてコードをコピー</li>
-                <li>Safariの共有ボタン（四角から矢印）→「ブックマークに追加」→「保存」</li>
-                <li>ブックマーク一覧で <strong>長押し→編集</strong> → URL欄を <strong>全部消して</strong> コードを貼り付け</li>
-                <li>名前を「YouTube DL」に変更 → 完了</li>
-                <li>YouTube動画ページでそのブックマークを <strong>タップ</strong></li>
-            </ol>
-            <div class="tip">⚠️ URL欄の先頭が <strong><code>javascript:</code></strong> で始まっているか確認！</div>
-            <div class="ok">✅ 「ダウンロード」をタップすれば保存完了</div>
-        </div>
-
-        <div class="device-content" id="device-android">
-            <ol>
-                <li><strong>「コピーする」</strong> をタップしてコードをコピー</li>
-                <li>Chromeの <strong>☆（星）</strong> をタップ → 名前「YouTube DL」で保存</li>
-                <li>右上「︙」→「ブックマーク」→「ブックマークを管理」</li>
-                <li>「YouTube DL」の右「︙」→「編集」→ URL欄を <strong>全部消して</strong> コードを貼り付け</li>
-                <li>「保存」をタップ</li>
-                <li>YouTube動画ページでそのブックマークを <strong>タップ</strong></li>
-            </ol>
-            <div class="tip">⚠️ URL欄の先頭が <strong><code>javascript:</code></strong> で始まっているか確認！</div>
-            <div class="ok">✅ 「ダウンロード」をタップすれば保存完了</div>
+    <!-- ヘッダー -->
+    <div class="header">
+        <h1>⬇️ YouTube <span class="yt">100%</span> DL</h1>
+        <div class="sub">デバイス別・確実にダウンロードする方法</div>
+        <div class="badges">
+            <span class="badge green">✅ PC</span>
+            <span class="badge blue">✅ iPhone</span>
+            <span class="badge green">✅ Android</span>
+            <span class="badge yellow">⚠ 署名動画は外部ツール推奨</span>
         </div>
     </div>
 
-    <!-- ===== ★★★ それでも動かない人のためのチェックリスト ★★★ ===== -->
-    <div class="checklist">
-        <p><strong>🚨 「何も起こらない」場合のチェックリスト</strong></p>
-        <p>□ YouTubeの <strong>動画ページ</strong>（<code>watch?v=</code> が付くURL）で実行していますか？<br>
-           □ ブックマークのURL欄の先頭が <strong><code>javascript:</code></strong> で始まっていますか？<br>
-           □ ページが完全に読み込まれてからブックマークをタップしましたか？<br>
-           □ ライブ配信・年齢制限・削除済み動画ではありませんか？<br>
-           □ Safariの場合は「設定」→「Safari」→「ダウンロード」で保存先を確認</p>
-        <p style="color:#ffaa00;font-size:12px;margin-top:4px;">
-            💡 それでもダメな場合は、<strong>アドレスバーに直接コードを貼り付けて「移動」</strong> してみてください（上のコードをコピーして `javascript:` から貼り付ける）。
-        </p>
+    <!-- ============================================================ -->
+    <!-- タブ -->
+    <!-- ============================================================ -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-pc">💻 PC</button>
+        <button class="tab-btn" data-tab="tab-iphone">📱 iPhone</button>
+        <button class="tab-btn" data-tab="tab-android">🤖 Android</button>
+        <button class="tab-btn" data-tab="tab-all">🌐 全デバイス共通</button>
     </div>
 
-    <div class="footer">✅ 限定公開OK &nbsp;|&nbsp; 🎵 音声付き高画質 &nbsp;|&nbsp; 📱 全デバイス対応</div>
+    <!-- ============================================================ -->
+    <!-- PC タブ -->
+    <!-- ============================================================ -->
+    <div class="panel active" id="tab-pc">
+        <div class="panel-title">💻 PC（Windows / Mac）</div>
+        <div class="panel-desc">
+            <span class="ok">✅ 最も確実な方法は <strong>yt-dlp</strong> を使うことです。</span><br>
+            コマンドラインで動作し、限定公開・署名動画・高画質・音声付きすべてに対応します。
+        </div>
+
+        <div style="margin-top:6px;">
+            <div class="step">
+                <span class="step-num">1</span>
+                <div class="step-text">
+                    <strong>yt-dlp をインストール</strong><br>
+                    <code>winget install yt-dlp.yt-dlp</code>（Windows）<br>
+                    <code>brew install yt-dlp</code>（Mac）
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <div class="step-text">
+                    <strong>FFmpeg もインストール</strong>（音声と動画の結合に必要）<br>
+                    <code>winget install Gyan.FFmpeg</code>（Windows）<br>
+                    <code>brew install ffmpeg</code>（Mac）
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <div class="step-text">
+                    <strong>コマンドを実行</strong><br>
+                    <code>yt-dlp -f "bestvideo+bestaudio" --merge-output-format mp4 "YouTubeのURL"</code>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2a2a;">
+            <div style="color:#aaa;font-size:13px;">📌 <strong>ブラウザだけで完結させたい場合</strong></div>
+            <div class="ext-links">
+                <a href="https://cobalt.tools" target="_blank">⚡ Cobalt.tools</a>
+                <a href="https://loader.to" target="_blank">📥 Loader.to</a>
+                <a href="https://y2mate.com" target="_blank">🎬 Y2mate</a>
+            </div>
+            <div style="color:#888;font-size:12px;margin-top:4px;">
+                💡 上記サイトにURLを貼るだけでダウンロードできます（広告あり）
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- iPhone タブ -->
+    <!-- ============================================================ -->
+    <div class="panel" id="tab-iphone">
+        <div class="panel-title">📱 iPhone（Safari）</div>
+        <div class="panel-desc">
+            <span class="ok">✅ iPhoneで確実なのは <strong>Cobalt.tools</strong> を使う方法です。</span><br>
+            アプリ不要・ブラウザだけで完結します。
+        </div>
+
+        <div style="margin-top:6px;">
+            <div class="step">
+                <span class="step-num">1</span>
+                <div class="step-text">
+                    <strong>Safariで <code>cobalt.tools</code> を開く</strong>
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <div class="step-text">
+                    <strong>YouTubeの動画URLをコピー</strong>して貼り付け
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <div class="step-text">
+                    <strong>矢印ボタン</strong>を押す → ダウンロード開始
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2a2a;">
+            <div style="color:#aaa;font-size:13px;">📌 <strong>ブックマークレットを使う場合</strong></div>
+            <div style="color:#888;font-size:12px;line-height:1.7;">
+                下のコードをコピーしてブックマークに登録 → YouTube動画ページでタップ
+            </div>
+            <div class="code-box">
+                <code id="bookmarkCode">
+<span class="hl">javascript:</span>(function(){let d=window.ytInitialPlayerResponse||(window.ytplayer?.config?.args?.player_response?JSON.parse(window.ytplayer.config.args.player_response):null);if(!d){alert('YouTubeの動画ページで実行してください');return}const all=[].concat(d.streamingData?.formats||[],d.streamingData?.adaptiveFormats||[]);if(all.length===0){alert('ストリーム情報がありません');return}let best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')&&f.mimeType.includes('audio')).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){best=all.filter(f=>f.mimeType&&f.mimeType.includes('video')).sort((a,b)=>(b.height||0)-(a.height||0))[0];}if(!best){best=all[0];}if(!best){alert('ストリームが見つかりません');return}let url=best.url||best.signatureCipher||best.cipher;if(!url){alert('URLがありません');return}if(url.includes('s=bf')||url.includes('signature')){alert('署名が必要です。ブラウザではダウンロードできません。');return}const title=d.videoDetails?.title||'video';const safeTitle=title.replace(/[\\/:*?\"<>|]/g,'_');const a=document.createElement('a');a.href=url;a.download=safeTitle+'.mp4';document.body.appendChild(a);a.click();setTimeout(()=>{try{document.body.removeChild(a);}catch(e){}},300);})();
+                </code>
+            </div>
+            <button class="btn-copy" onclick="copyBookmark()">📋 コードをコピー</button>
+            <div style="color:#f87171;font-size:12px;margin-top:4px;">
+                ⚠ 署名動画（ほとんどの動画）ではこの方式は失敗します。
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Android タブ -->
+    <!-- ============================================================ -->
+    <div class="panel" id="tab-android">
+        <div class="panel-title">🤖 Android（Chrome）</div>
+        <div class="panel-desc">
+            <span class="ok">✅ Androidで確実なのは <strong>NewPipe</strong> または <strong>Cobalt.tools</strong> です。</span>
+        </div>
+
+        <div style="margin-top:6px;">
+            <div style="color:#aaa;font-size:13px;font-weight:600;">方法A：NewPipe（アプリ）</div>
+            <div class="step">
+                <span class="step-num">1</span>
+                <div class="step-text">
+                    <strong>F-Droid</strong> から <strong>NewPipe</strong> をインストール
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <div class="step-text">
+                    YouTube動画を <strong>共有</strong> → NewPipe を選択
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <div class="step-text">
+                    ダウンロードボタンをタップ → 画質選択 → 保存
+                </div>
+            </div>
+
+            <div style="color:#aaa;font-size:13px;font-weight:600;margin-top:10px;">方法B：Cobalt.tools（ブラウザ）</div>
+            <div class="step">
+                <span class="step-num">1</span>
+                <div class="step-text">
+                    Chromeで <strong>cobalt.tools</strong> を開く
+                </div>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <div class="step-text">
+                    YouTubeのURLを貼り付けてダウンロード
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 全デバイス共通 タブ -->
+    <!-- ============================================================ -->
+    <div class="panel" id="tab-all">
+        <div class="panel-title">🌐 全デバイス共通（外部サービス）</div>
+        <div class="panel-desc">
+            <span class="ok">✅ どのデバイスでも同じように使えるサービスです。</span><br>
+            ブラウザだけで完結し、インストール不要。署名動画にも対応しています。
+        </div>
+
+        <div class="ext-links" style="justify-content:center;">
+            <a href="https://cobalt.tools" target="_blank" style="background:#2563eb;padding:12px 24px;">⚡ Cobalt.tools</a>
+            <a href="https://loader.to" target="_blank" style="background:#7c3aed;padding:12px 24px;">📥 Loader.to</a>
+            <a href="https://y2mate.com" target="_blank" style="background:#0891b2;padding:12px 24px;">🎬 Y2mate</a>
+            <a href="https://savetube.app" target="_blank" style="background:#059669;padding:12px 24px;">💾 SaveTube</a>
+        </div>
+
+        <div style="color:#888;font-size:12px;margin-top:8px;text-align:center;">
+            💡 これらのサイトにYouTubeのURLを貼り付けるだけでダウンロードできます。<br>
+            <span class="warn" style="color:#f87171;">⚠ 広告が表示される場合があります。自己責任でご利用ください。</span>
+        </div>
+
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid #2a2a2a;">
+            <div style="color:#aaa;font-size:13px;">📌 <strong>Failed to fetch エラーについて</strong></div>
+            <div style="color:#888;font-size:12px;line-height:1.7;">
+                このエラーは <strong>CORS（クロスオリジン）制限</strong> が原因です。<br>
+                ブラウザは YouTube のサーバーから直接データを取得することを許可していません。<br>
+                そのため、<strong>外部サービス（上記リンク）</strong> を使うのが確実な解決策です。
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 注意事項 -->
+    <!-- ============================================================ -->
+    <div class="note-box">
+        <div class="title">🚨 共通の注意事項</div>
+        <ul>
+            <li><strong>ブラウザ単体</strong>では署名（cipher）が必要な動画はダウンロードできません</li>
+            <li>年齢制限・メンバー限定・ライブ配信中の動画は対象外です</li>
+            <li>iPhone Safari では <code>download</code> 属性が無視される場合があります</li>
+            <li><strong>確実性を求めるなら yt-dlp（PC）</strong> が最強です</li>
+            <li>YouTubeの利用規約を遵守し、動画の権利者を尊重してください</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        ✅ デバイス別に確実な方法をまとめました &nbsp;|&nbsp; 📱 PC / iPhone / Android 対応<br>
+        ⚠ このページはガイドです。実際のダウンロードは自己責任でお願いします。
+    </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- スクリプト -->
+<!-- ============================================================ -->
 <script>
-    const CODE = document.getElementById('bookmarkCode').innerText.trim();
+    // ===== タブ切り替え =====
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
 
-    function copyCode() {
+    // ===== ブックマークコードコピー =====
+    const BOOKMARK_CODE = document.getElementById('bookmarkCode').textContent.trim();
+
+    function copyBookmark() {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(CODE).then(() => {
+            navigator.clipboard.writeText(BOOKMARK_CODE).then(() => {
                 alert('✅ コードをコピーしました！\n先頭に javascript: が付いていることを確認してください。');
-            }).catch(() => fallbackCopy());
+            }).catch(() => fallbackCopyBookmark());
         } else {
-            fallbackCopy();
+            fallbackCopyBookmark();
         }
     }
 
-    function fallbackCopy() {
+    function fallbackCopyBookmark() {
         const ta = document.createElement('textarea');
-        ta.value = CODE;
+        ta.value = BOOKMARK_CODE;
         ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;';
         document.body.appendChild(ta);
         ta.focus();
@@ -318,22 +521,6 @@
         }
         document.body.removeChild(ta);
     }
-
-    document.querySelector('.code-box').addEventListener('click', function() {
-        const range = document.createRange();
-        range.selectNode(this);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-    });
-
-    document.querySelectorAll('.device-tabs button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.device-tabs button').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            document.querySelectorAll('.device-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('device-' + this.dataset.device).classList.add('active');
-        });
-    });
 </script>
 </body>
 </html>
