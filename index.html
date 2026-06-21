@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>限定公開対応 YouTube DL (単一HTML)</title>
+    <title>YouTube DL インストーラー</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -17,350 +17,312 @@
         }
         .container {
             background: #1a1a1a;
-            max-width: 680px;
+            max-width: 720px;
             width: 100%;
             padding: 32px 24px;
-            border-radius: 24px;
+            border-radius: 28px;
             border: 1px solid #2a2a2a;
+            text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.9);
         }
-        h1 { color: #fff; font-size: 24px; text-align: center; letter-spacing: -0.5px; }
+        h1 { color: #fff; font-size: 28px; font-weight: 700; }
         .sub {
             color: #888;
-            text-align: center;
-            font-size: 13px;
-            margin: 6px 0 24px 0;
+            font-size: 14px;
+            margin: 8px 0 24px 0;
+            padding-bottom: 20px;
             border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 16px;
         }
-        .sub .badge { background: #ff0000; color: #fff; padding: 2px 12px; border-radius: 20px; font-size: 11px; margin-left: 6px; }
-        .input-group { display: flex; flex-direction: column; gap: 10px; }
-        .input-group input {
-            padding: 14px 16px;
-            font-size: 15px;
-            border: 2px solid #333;
-            border-radius: 14px;
-            background: #0d0d0d;
-            color: #fff;
-            outline: none;
-            transition: 0.2s;
-            width: 100%;
-        }
-        .input-group input:focus { border-color: #ff0000; box-shadow: 0 0 0 3px rgba(255,0,0,0.12); }
-        .input-group input::placeholder { color: #555; }
-        .btn-download {
-            padding: 15px;
-            font-size: 17px;
-            font-weight: 700;
+        .sub .badge {
             background: #ff0000;
             color: #fff;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: 0.15s;
-            width: 100%;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 6px;
         }
-        .btn-download:hover { background: #cc0000; transform: scale(1.01); }
-        .btn-download:disabled { background: #444; cursor: not-allowed; transform: none; }
-        #status {
-            margin-top: 18px;
-            padding: 14px 16px;
-            border-radius: 14px;
+
+        .install-area {
             background: #0d0d0d;
-            border: 1px solid #2a2a2a;
-            color: #ccc;
-            font-size: 14px;
-            line-height: 1.6;
-            min-height: 56px;
-            word-break: break-all;
+            border: 2px dashed #444;
+            border-radius: 18px;
+            padding: 30px 20px;
+            margin: 10px 0 20px 0;
+            transition: 0.3s;
         }
-        #status .success { color: #4caf50; font-weight: bold; }
-        #status .error { color: #ff5555; font-weight: bold; }
-        #status .warn { color: #ffaa00; }
-        .result-area { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
-        .result-item {
-            background: #0d0d0d;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+        .install-area:hover {
+            border-color: #ff0000;
+            background: #150505;
         }
-        .result-item .label { color: #aaa; font-size: 13px; }
-        .result-item .label strong { color: #fff; }
-        .result-item .dl-link {
-            background: #2a2a2a;
+        .drag-link {
+            display: inline-block;
+            background: #ff0000;
             color: #fff;
-            padding: 7px 18px;
-            border-radius: 30px;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 16px 40px;
+            border-radius: 60px;
             text-decoration: none;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 20px rgba(255,0,0,0.3);
+            transition: 0.2s;
+        }
+        .drag-link:hover {
+            transform: scale(1.05);
+            background: #cc0000;
+        }
+        .drag-link:active { cursor: grabbing; }
+        .install-hint {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 14px;
+        }
+        .install-hint strong { color: #fff; }
+
+        .or-divider {
+            color: #555;
             font-size: 13px;
+            margin: 20px 0;
+        }
+
+        .manual-area {
+            background: #0d0d0d;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: left;
+        }
+        .manual-area label {
+            color: #aaa;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .code-box {
+            background: #000;
+            color: #4caf50;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            border: 1px solid #333;
+            overflow-x: auto;
+            white-space: nowrap;
+            user-select: all;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 24px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .copy-btn:hover { background: #555; }
+
+        .howto {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a2a;
+            text-align: left;
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .howto strong { color: #fff; }
+        .howto .step {
+            background: #0d0d0d;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin: 6px 0;
+            border-left: 3px solid #ff0000;
+        }
+        .howto .highlight { color: #ffaa00; }
+
+        .device-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0 12px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .device-tabs button {
+            background: #2a2a2a;
+            color: #aaa;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
             font-weight: 600;
             transition: 0.2s;
-            border: 1px solid #444;
         }
-        .result-item .dl-link:hover { background: #ff0000; border-color: #ff0000; }
-        .footer-tips {
+        .device-tabs button.active {
+            background: #ff0000;
+            color: #fff;
+        }
+        .device-tabs button:hover { background: #444; }
+
+        .device-content {
+            display: none;
+            background: #0d0d0d;
+            border-radius: 14px;
+            padding: 16px 18px;
+            text-align: left;
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 8px;
+        }
+        .device-content.active { display: block; }
+        .device-content strong { color: #fff; }
+        .device-content .emoji-big { font-size: 28px; }
+
+        .footer {
             margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #2a2a2a;
-            color: #666;
+            color: #555;
             font-size: 12px;
-            line-height: 1.7;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 16px;
         }
-        .footer-tips strong { color: #aaa; }
-        .footer-tips .hl { color: #ffaa00; }
-        .footer-tips .note { color: #555; font-size: 11px; }
-        @media (max-width: 480px) { .container { padding: 16px; } h1 { font-size: 20px; } }
+        .footer a { color: #ff0000; text-decoration: none; }
+        @media (max-width: 480px) { .container { padding: 16px; } h1 { font-size: 22px; } }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⬇️ YouTube 限定公開対応 DL</h1>
-    <div class="sub">公開・限定公開どちらも可 <span class="badge">アカウント不要</span></div>
+    <h1>⬇️ YouTube ワンクリックDL</h1>
+    <div class="sub">限定公開・公開どちらもOK <span class="badge">アカウント不要</span></div>
 
-    <div class="input-group">
-        <input type="text" id="urlInput" placeholder="YouTube URL を貼り付けてください" autofocus>
-        <button class="btn-download" id="downloadBtn">🚀 解析＆ダウンロード</button>
+    <!-- ★ ブックマークレット ドラッグエリア ★ -->
+    <div class="install-area">
+        <p style="color: #fff; font-weight: 600; margin-bottom: 16px;">
+            🖱️ 下のボタンを <strong>ブックマークバー</strong> にドラッグ＆ドロップ
+        </p>
+        <a href="javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();" class="drag-link" id="bookmarkletLink">
+            ⬇ ダウンロード (ドラッグしてね)
+        </a>
+        <div class="install-hint">
+            💡 <strong>ブックマークバー</strong>が見えない場合は <kbd>Ctrl+Shift+B</kbd> (Macは <kbd>Cmd+Shift+B</kbd>)
+        </div>
     </div>
 
-    <div id="status">📌 URLを入力して「解析」を押してください。</div>
-    <div id="resultContainer" class="result-area"></div>
+    <div class="or-divider">— または手動でインストール —</div>
 
-    <div class="footer-tips">
-        <p>📱 <strong>iPhoneで写真フォルダに保存</strong> → リンクを<strong>長押し</strong>して「ビデオを保存」</p>
-        <p class="note">⚠️ このツールは複数のCORSプロキシを経由してYouTubeを直接解析します。<br>
-        限定公開動画も理論上は対応していますが、YouTubeの構造変更やプロキシの制限で失敗する場合があります。<br>
-        <span class="hl">💡 失敗する場合: ページを再読み込みして再試行するか、別の時間帯にお試しください。</span></p>
+    <!-- 手動コピー用 -->
+    <div class="manual-area">
+        <label>📋 以下のコードをコピーして、新しいブックマークのURL欄に貼り付ける</label>
+        <div class="code-box" id="codeDisplay">
+            javascript:(function(){const d=ytInitialPlayerResponse;if(!d){alert('動画ページで実行してください');return}const f=d.streamingData?.formats||[];const af=d.streamingData?.adaptiveFormats||[];const all=[...f,...af];const best=all.filter(f=>f.hasVideo&&f.hasAudio).sort((a,b)=>(b.height||0)-(a.height||0))[0]||all.filter(f=>f.hasVideo).sort((a,b)=>(b.height||0)-(a.height||0))[0];if(!best){alert('ダウンロード可能なストリームがありません');return}const title=d.videoDetails?.title||'video';const a=document.createElement('a');a.href=best.url;a.download=title+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a)})();
+        </div>
+        <button class="copy-btn" onclick="copyCode()">📋 コピーする</button>
+    </div>
+
+    <!-- デバイス別 使い方タブ -->
+    <div class="howto">
+        <p style="text-align:center; margin-bottom:12px;"><strong>📱 デバイス別 インストール手順</strong></p>
+        <div class="device-tabs">
+            <button class="active" data-device="iphone">📱 iPhone</button>
+            <button data-device="android">🤖 Android</button>
+            <button data-device="pc">💻 PC</button>
+        </div>
+
+        <!-- iPhone -->
+        <div class="device-content active" id="device-iphone">
+            <p><span class="emoji-big">📱</span> <strong>iPhone (Safari)</strong></p>
+            <ol style="padding-left:20px; margin:8px 0;">
+                <li>上の <strong>「📋 コピーする」</strong> ボタンを押してコードをコピー</li>
+                <li>Safariで <strong>適当なページ</strong>（例：Google）を開く</li>
+                <li>画面下の <strong>「共有」アイコン</strong>（四角から矢印）→「ブックマークに追加」</li>
+                <li>「保存」をタップ（名前は後で変えられる）</li>
+                <li>ブックマーク一覧（本のマーク）で <strong>さっきのブックマークを長押し</strong> →「編集」</li>
+                <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
+                <li>「完了」をタップ → 名前を「YouTube DL」とかに変えるとGood</li>
+            </ol>
+            <p style="color:#888;font-size:13px;">✅ 使う時は <strong>SafariでYouTube動画ページ</strong> を開き、ブックマークをタップするだけ！</p>
+        </div>
+
+        <!-- Android -->
+        <div class="device-content" id="device-android">
+            <p><span class="emoji-big">🤖</span> <strong>Android (Chrome)</strong></p>
+            <ol style="padding-left:20px; margin:8px 0;">
+                <li>上の <strong>「📋 コピーする」</strong> ボタンを押してコードをコピー</li>
+                <li>Chromeで <strong>このページ</strong> を開いた状態で、アドレスバーの <strong>「☆」（星）</strong> をタップ</li>
+                <li>名前を「YouTube DL」に変えて「保存」</li>
+                <li>右上の <strong>「︙」</strong> →「ブックマーク」→「ブックマークを管理」</li>
+                <li>さっきの「YouTube DL」の <strong>右の「︙」</strong> →「編集」</li>
+                <li><strong>「URL」の欄を全部消して</strong>、手順①のコードを貼り付け</li>
+                <li>「保存」をタップ</li>
+            </ol>
+            <p style="color:#888;font-size:13px;">✅ 使う時は <strong>ChromeでYouTube動画ページ</strong> を開き、ブックマークをタップするだけ！</p>
+        </div>
+
+        <!-- PC -->
+        <div class="device-content" id="device-pc">
+            <p><span class="emoji-big">💻</span> <strong>PC (Chrome/Edge/Firefox)</strong></p>
+            <p style="color:#ffaa00;font-weight:600;">🔥 超簡単！ 赤いボタンを <strong>ブックマークバー</strong> にドラッグ＆ドロップするだけ！</p>
+            <p style="color:#888;font-size:13px;">💡 ブックマークバーが見えない時は <kbd>Ctrl+Shift+B</kbd> (Macは <kbd>Cmd+Shift+B</kbd>)</p>
+            <hr style="border-color:#2a2a2a;margin:12px 0;">
+            <p style="font-size:13px;color:#aaa;">👆 ドラッグができない場合は、上のコードをコピーして新しいブックマークのURL欄に貼り付けてください。</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        ⚠️ YouTubeの仕様変更で突然動かなくなる可能性があります<br>
+        質問があればこのページを再読み込みして「使い方」をもう一度見てね！
     </div>
 </div>
 
 <script>
-    (function() {
-        const urlInput = document.getElementById('urlInput');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const statusDiv = document.getElementById('status');
-        const resultContainer = document.getElementById('resultContainer');
+    // デバイスタブ切り替え
+    document.querySelectorAll('.device-tabs button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.device-tabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const device = this.dataset.device;
+            document.querySelectorAll('.device-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('device-' + device).classList.add('active');
+        });
+    });
 
-        function extractVideoId(url) {
-            const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})(?:[?&]|$)/);
-            return match ? match[1] : null;
+    // コードコピー
+    function copyCode() {
+        const code = document.getElementById('codeDisplay').innerText;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ コピー完了！';
+                setTimeout(() => { btn.textContent = '📋 コピーする'; }, 2000);
+            }).catch(() => fallbackCopy(code));
+        } else {
+            fallbackCopy(code);
         }
+    }
 
-        function setStatus(msg, type = 'info') {
-            statusDiv.innerHTML = msg;
-            statusDiv.className = type;
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            alert('✅ コピーしました！');
+        } catch (e) {
+            alert('手動でコードを選択してコピーしてください。');
         }
+        document.body.removeChild(textarea);
+    }
 
-        function clearResults() {
-            resultContainer.innerHTML = '';
-        }
-
-        function renderDownloadLinks(videoData) {
-            clearResults();
-            let html = '';
-            if (videoData.progressive) {
-                html += `
-                    <div class="result-item">
-                        <span class="label">🎬 音声＋動画 (プログレッシブ) <strong>${videoData.quality || '高画質'}</strong></span>
-                        <a href="${videoData.progressive}" class="dl-link" download="${videoData.title || 'video'}.mp4">⬇ 保存</a>
-                    </div>
-                `;
-            }
-            if (videoData.videoOnly) {
-                html += `
-                    <div class="result-item">
-                        <span class="label">🎥 動画のみ (音声なし) <strong>${videoData.videoQuality || ''}</strong></span>
-                        <a href="${videoData.videoOnly}" class="dl-link" download="${videoData.title || 'video'}_video.mp4">⬇ 保存</a>
-                    </div>
-                `;
-            }
-            if (videoData.audioOnly) {
-                html += `
-                    <div class="result-item">
-                        <span class="label">🎵 音声のみ</span>
-                        <a href="${videoData.audioOnly}" class="dl-link" download="${videoData.title || 'video'}_audio.mp4">⬇ 保存</a>
-                    </div>
-                `;
-            }
-            if (!html) {
-                html = `<div class="result-item"><span class="label" style="color:#ff5555;">❌ ダウンロード可能なストリームが見つかりませんでした。</span></div>`;
-            }
-            resultContainer.innerHTML = html;
-        }
-
-        // ---------- 複数プロキシを順に試行 ----------
-        async function fetchWithProxy(videoId) {
-            const proxyList = [
-                // 信頼性の高いプロキシを優先
-                (id) => `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`,
-                (id) => `https://corsproxy.io/?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`,
-                (id) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`,
-                (id) => `https://corsproxy.org/?${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`,
-            ];
-
-            for (const proxyFn of proxyList) {
-                try {
-                    const proxyUrl = proxyFn(videoId);
-                    const res = await fetch(proxyUrl, {
-                        signal: AbortSignal.timeout(15000),
-                        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-                    });
-                    if (!res.ok) continue;
-                    const html = await res.text();
-                    if (html.length > 10000) { // 有効なHTMLが返ってきた
-                        return html;
-                    }
-                } catch (e) {
-                    // 次のプロキシへ
-                }
-            }
-            return null;
-        }
-
-        // ---------- HTMLから動画情報を抽出 (堅牢化) ----------
-        function parseYouTubeHTML(html) {
-            try {
-                // 方法1: ytInitialPlayerResponse を抽出 (最も確実)
-                let match = html.match(/var ytInitialPlayerResponse\s*=\s*({.+?});/s);
-                if (!match) {
-                    // 別のパターン
-                    match = html.match(/ytInitialPlayerResponse\s*=\s*({.+?});/s);
-                }
-                if (!match) {
-                    // さらに別のパターン (圧縮されたJS内)
-                    match = html.match(/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/s);
-                }
-                if (!match) {
-                    throw new Error('ytInitialPlayerResponse が見つかりません');
-                }
-
-                const data = JSON.parse(match[1]);
-                const streamingData = data.streamingData;
-                if (!streamingData) throw new Error('streamingData が見つかりません');
-
-                // タイトルを取得
-                const title = data.videoDetails?.title || 'video';
-
-                // フォーマットを収集
-                const formats = streamingData.formats || [];
-                const adaptiveFormats = streamingData.adaptiveFormats || [];
-                const allFormats = [...formats, ...adaptiveFormats];
-
-                if (allFormats.length === 0) throw new Error('ストリームがありません');
-
-                // プログレッシブ (音声付き) を抽出
-                const progressive = formats.filter(f => f.hasAudio && f.hasVideo);
-                // 動画のみ (音声なし)
-                const videoOnly = adaptiveFormats.filter(f => f.mimeType && f.mimeType.includes('video'));
-                // 音声のみ
-                const audioOnly = adaptiveFormats.filter(f => f.mimeType && f.mimeType.includes('audio'));
-
-                // 高画質順にソート
-                const sortByHeight = (arr) => arr.sort((a, b) => (b.height || 0) - (a.height || 0));
-                sortByHeight(progressive);
-                sortByHeight(videoOnly);
-                const sortByBitrate = (arr) => arr.sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
-                sortByBitrate(audioOnly);
-
-                const result = {
-                    title: title,
-                    progressive: progressive.length > 0 ? progressive[0].url : null,
-                    quality: progressive.length > 0 ? (progressive[0].qualityLabel || `${progressive[0].height}p`) : null,
-                    videoOnly: videoOnly.length > 0 ? videoOnly[0].url : null,
-                    videoQuality: videoOnly.length > 0 ? (videoOnly[0].qualityLabel || `${videoOnly[0].height}p`) : null,
-                    audioOnly: audioOnly.length > 0 ? audioOnly[0].url : null,
-                };
-
-                // プログレッシブがない場合、videoOnlyがあればそれを使う
-                if (!result.progressive && result.videoOnly) {
-                    result.progressive = result.videoOnly;
-                    result.quality = result.videoQuality;
-                }
-
-                return result;
-            } catch (e) {
-                console.error('Parse error:', e);
-                throw new Error('動画情報の解析に失敗しました: ' + e.message);
-            }
-        }
-
-        // ---------- メイン実行 ----------
-        async function handleDownload() {
-            const url = urlInput.value.trim();
-            if (!url) {
-                alert('YouTubeのURLを入力してください。');
-                return;
-            }
-            const videoId = extractVideoId(url);
-            if (!videoId) {
-                setStatus('❌ 無効なYouTube URLです。 (動画IDが取得できません)', 'error');
-                return;
-            }
-
-            downloadBtn.disabled = true;
-            downloadBtn.textContent = '⏳ 解析中...';
-            clearResults();
-            setStatus(`🔍 動画ID: ${videoId} を取得中... (複数プロキシを試行)`, 'info');
-
-            try {
-                // プロキシ経由でHTMLを取得
-                setStatus(`🔍 プロキシ経由でYouTubeページを取得中... (最大15秒)`, 'info');
-                const html = await fetchWithProxy(videoId);
-
-                if (!html) {
-                    setStatus(`❌ 全てのプロキシが応答しませんでした。<br>
-                              <span class="warn">📌 考えられる原因:</span><br>
-                              ・プロキシサービスが一時的に制限中（数分待って再試行）<br>
-                              ・動画が削除されている、または地域制限がかかっている<br>
-                              ・ネットワーク環境でプロキシがブロックされている`, 'error');
-                    downloadBtn.disabled = false;
-                    downloadBtn.textContent = '🚀 解析＆ダウンロード';
-                    return;
-                }
-
-                setStatus(`🔍 HTML取得成功 (${html.length}文字)。動画情報を解析中...`, 'info');
-
-                // パース
-                const parsed = parseYouTubeHTML(html);
-
-                // 結果表示
-                const qualityLabel = parsed.quality || '高画質';
-                setStatus(`✅ <span class="success">取得成功!</span> タイトル: ${parsed.title} | 画質: ${qualityLabel}`, 'success');
-
-                renderDownloadLinks(parsed);
-
-                // 自動ダウンロード実行 (プログレッシブがあれば)
-                if (parsed.progressive) {
-                    const a = document.createElement('a');
-                    a.href = parsed.progressive;
-                    a.download = `${parsed.title || 'video'}.mp4`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    setStatus(`✅ <span class="success">自動ダウンロードを開始しました。</span><br>
-                              タイトル: ${parsed.title} | 画質: ${qualityLabel}<br>
-                              <span style="font-size:12px;color:#888;">自動で始まらない場合は上のリンクをクリックしてください。</span>`, 'success');
-                }
-
-            } catch (err) {
-                console.error(err);
-                setStatus(`❌ エラー: ${err.message}<br>
-                          <span class="warn">💡 ページを再読み込みして再試行するか、数分待ってからもう一度お試しください。</span>`, 'error');
-            } finally {
-                downloadBtn.disabled = false;
-                downloadBtn.textContent = '🚀 解析＆ダウンロード';
-            }
-        }
-
-        // イベント
-        downloadBtn.addEventListener('click', handleDownload);
-        urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleDownload(); });
-        urlInput.focus();
-    })();
+    // コードボックスをクリックで全選択
+    document.getElementById('codeDisplay').addEventListener('click', function() {
+        const range = document.createRange();
+        range.selectNode(this);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    });
 </script>
 </body>
 </html>
